@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background: #f8f9fa;
+      color: #333;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    header h1 {
+      font-size: 2.2em;
+      margin-bottom: 15px;
+      font-weight: normal;
+    }
+    
+    header p {
+      font-size: 1em;
+      margin-bottom: 8px;
+      color: #666;
+    }
+    
+    .header-actions {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    
+    .btn-export {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s ease;
+    }
+    
+    .btn-export:hover {
+      background: #555;
+    }
+    
+    nav {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    nav a {
+      color: #333;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+      border: 1px solid #ddd;
+      background: white;
+    }
+    
+    nav a:hover {
+      background: #f8f9fa;
+    }
+    
+    main {
+      padding: 30px;
+    }
+    
+    section {
+      margin-bottom: 40px;
+    }
+    
+    h2 {
+      color: #333;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    .editable {
+      border: 1px solid #ddd;
+      padding: 15px;
+      min-height: 100px;
+      border-radius: 4px;
+      background: #fafafa;
+      transition: border 0.2s ease;
+    }
+    
+    .editable:hover {
+      border-color: #999;
+    }
+    
+    .editable:focus {
+      outline: none;
+      border-color: #333;
+      background: white;
+    }
+    
+    .editable p {
+      margin-bottom: 12px;
+    }
+    
+    .editable strong {
+      color: #333;
+    }
+    
+    .editable ul {
+      padding-left: 20px;
+    }
+    
+    .editable li {
+      margin-bottom: 6px;
+    }
+    
+    /* Placeholder styles */
+    [contenteditable="true"]:empty:before {
+      content: attr(data-placeholder);
+      color: #999;
+      font-style: italic;
+      white-space: pre-line;
+    }
+    
+    [contenteditable="true"]:focus:empty:before {
+      content: attr(data-placeholder);
+      color: #ccc;
+      white-space: pre-line;
+    }
+    
+    /* Placeholder for elements with content */
+    [contenteditable="true"][data-placeholder]:not(:empty):before {
+      display: none;
+    }
+    
+    .template-section {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      border-left: 3px solid #ddd;
+    }
+    
+    .template-section h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    /* Tipo de relatório selector */
+    .report-type-selector {
+      background: #f8f9fa;
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .report-type-selector label {
+      font-weight: bold;
+      margin-right: 20px;
+      color: #333;
+    }
+    
+    .report-type-selector select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    .report-type-selector select:focus {
+      outline: none;
+      border-color: #333;
+    }
+    
+    /* Seletor de fonte */
+    .font-selector {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .font-selector label {
+      font-size: 12px;
+      color: #666;
+      font-weight: bold;
+    }
+    
+    .font-selector select {
+      padding: 4px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    .font-selector select:focus {
+      outline: none;
+      border-color: #333;
+    }
+    
+    /* Classes de fonte */
+    .font-arial {
+      font-family: 'Arial', sans-serif !important;
+    }
+    
+    .font-times {
+      font-family: 'Times New Roman', serif !important;
+    }
+    
+    .font-helvetica {
+      font-family: 'Helvetica', sans-serif !important;
+    }
+    
+    .font-georgia {
+      font-family: 'Georgia', serif !important;
+    }
+    
+    .font-verdana {
+      font-family: 'Verdana', sans-serif !important;
+    }
+    
+    .font-courier {
+      font-family: 'Courier New', monospace !important;
+    }
+    
+    /* Versão simples */
+    .simple-version {
+      display: none;
+    }
+    
+    .simple-version .editable {
+      min-height: 400px;
+      font-size: 16px;
+      line-height: 1.8;
+      padding: 25px;
+    }
+    
+    .simple-version .editable:focus {
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .simple-version h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 1.8em;
+    }
+    
+    .formatting-toolbar {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .formatting-toolbar button {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+    
+    .formatting-toolbar button:hover {
+      background: #f0f0f0;
+      border-color: #999;
+    }
+    
+    .formatting-toolbar button.active {
+      background: #333;
+      color: white;
+      border-color: #333;
+    }
+    
+    .word-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+    }
+    
+    .simple-version .editable p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+    
+    .simple-version .editable strong {
+      font-weight: bold;
+    }
+    
+    .simple-version .editable em {
+      font-style: italic;
+    }
+    
+    .simple-version .editable ul, 
+    .simple-version .editable ol {
+      margin: 15px 0;
+      padding-left: 25px;
+    }
+    
+    .simple-version .editable li {
+      margin-bottom: 8px;
+    }
+    
+    .simple-version .editable h3 {
+      color: #333;
+      margin: 25px 0 15px 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .simple-version .editable h4 {
+      color: #555;
+      margin: 20px 0 10px 0;
+    }
+    
+    .simple-version .editable blockquote {
+      border-left: 4px solid #ddd;
+      padding-left: 15px;
+      margin: 15px 0;
+      font-style: italic;
+      color: #666;
+    }
+    
+    /* Botão flutuante de ajuda */
+    .help-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      display: none;
+      transition: all 0.3s ease;
+    }
+    
+    .help-button:hover {
+      background: #555;
+      transform: scale(1.1);
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .modal-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .close-modal:hover {
+      color: #333;
+    }
+    
+    .modal-body {
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    .modal-body h3 {
+      color: #333;
+      margin: 20px 0 10px 0;
+      font-size: 1.2em;
+    }
+    
+    .modal-body ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .modal-body li {
+      margin-bottom: 8px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+    
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #333;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .btn-export, nav {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      
+      header {
+        padding: 20px 15px;
+      }
+      
+      header h1 {
+        font-size: 1.6em;
+        margin-bottom: 12px;
+      }
+      
+      header p {
+        font-size: 0.9em;
+        margin-bottom: 6px;
+      }
+      
+      .header-actions {
+        position: static;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      
+      .btn-export {
+        width: 100%;
+        max-width: 200px;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 25px;
+      }
+      
+      /* Seletor de fonte mobile melhorado */
+      .font-selector {
+        position: static;
+        margin: 15px 0;
+        justify-content: center;
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+      }
+      
+      .font-selector label {
+        font-size: 12px;
+        color: #333;
+        margin-right: 8px;
+      }
+      
+      .font-selector select {
+        padding: 8px 12px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: white;
+        min-width: 120px;
+      }
+      
+      .report-type-selector {
+        padding: 12px;
+        margin: 15px 0;
+      }
+      
+      .report-type-selector label {
+        display: block;
+        margin-bottom: 8px;
+        margin-right: 0;
+        text-align: center;
+      }
+      
+      .report-type-selector select {
+        width: 100%;
+        max-width: 200px;
+        padding: 10px 15px;
+        font-size: 16px;
+      }
+      
+      nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin-top: 15px;
+      }
+      
+      nav a {
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+      
+      main {
+        padding: 20px 15px;
+      }
+      
+      section {
+        margin-bottom: 30px;
+      }
+      
+      h2 {
+        font-size: 1.4em;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      
+      .editable {
+        padding: 15px;
+        min-height: 120px;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      
+      /* Versão simples mobile */
+      .simple-version .editable {
+        min-height: 300px;
+        padding: 20px;
+        font-size: 16px;
+        line-height: 1.7;
+      }
+      
+      .formatting-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px;
+        justify-content: center;
+      }
+      
+      .formatting-toolbar button {
+        padding: 8px 12px;
+        font-size: 14px;
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .word-count {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      
+      /* Botão de ajuda mobile */
+      .help-button {
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        border-radius: 50%;
+      }
+      
+      /* Modal mobile */
+      .modal-content {
+        margin: 10% auto;
+        padding: 20px;
+        width: 95%;
+        max-width: none;
+        max-height: 85vh;
+      }
+      
+      .modal-header {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+      }
+      
+      .modal-title {
+        font-size: 1.3em;
+      }
+      
+      .modal-body {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      
+      .modal-body h3 {
+        font-size: 1.1em;
+        margin: 15px 0 8px 0;
+      }
+      
+      .modal-body ul {
+        padding-left: 15px;
+      }
+      
+      .modal-body li {
+        margin-bottom: 6px;
+      }
+      
+      /* Melhorar espaçamento em telas pequenas */
+      .template-section {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      
+      .template-section h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+      }
+      
+      /* Otimizar para telas muito pequenas */
+      @media (max-width: 480px) {
+        body {
+          padding: 5px;
+        }
+        
+        header {
+          padding: 15px 10px;
+        }
+        
+        header h1 {
+          font-size: 1.4em;
+        }
+        
+        main {
+          padding: 15px 10px;
+        }
+        
+        .editable {
+          padding: 12px;
+          font-size: 15px;
+        }
+        
+        .formatting-toolbar {
+          padding: 10px;
+        }
+        
+        .formatting-toolbar button {
+          padding: 6px 10px;
+          font-size: 13px;
+          min-width: 35px;
+          height: 35px;
+        }
+        
+        .help-button {
+          width: 55px;
+          height: 55px;
+          font-size: 22px;
+        }
+        
+        /* Seletor de fonte mobile para telas muito pequenas */
+        .font-selector {
+          margin: 10px 0;
+          padding: 8px;
+        }
+        
+        .font-selector label {
+          font-size: 11px;
+        }
+        
+        .font-selector select {
+          padding: 6px 8px;
+          font-size: 12px;
+          min-width: 100px;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-actions">
+        <button class="btn-export" onclick="exportToPDF()">
+          Exportar PDF
+        </button>
+      </div>
+      
+      <div class="font-selector">
+        <label for="fontFamily">Fonte:</label>
+        <select id="fontFamily" onchange="changeFont()">
+          <option value="arial">Arial</option>
+          <option value="times">Times New Roman</option>
+          <option value="helvetica">Helvetica</option>
+          <option value="georgia">Georgia</option>
+          <option value="verdana">Verdana</option>
+          <option value="courier">Courier New</option>
+        </select>
+      </div>
+      
+      <h1 contenteditable="true" data-placeholder="Digite o título do seu relatório aqui...">Título do Relatório</h1>
+      <p contenteditable="true" data-placeholder="Digite o nome do autor..." class="autor">Autor: Nome do Autor</p>
+      <p contenteditable="true" data-placeholder="Digite o nome do professor..." class="professor">Professor: Nome do Professor</p>
+      <p contenteditable="true" data-placeholder="Digite a data (ex: 15/12/2024)..." class="data">Data:</p>
+      
+      <div class="report-type-selector">
+        <label for="reportType">Tipo de Relatório:</label>
+        <select id="reportType" onchange="changeReportType()">
+          <option value="detailed">Detalhado</option>
+          <option value="simple">Simples</option>
+        </select>
+      </div>
+      <nav class="nav-detailed">
+        <a href="#introducao">Introdução</a>
+        <a href="#desenvolvimento">Desenvolvimento</a>
+        <a href="#consideracoes">Considerações Finais</a>
+        <a href="#referencias">Referências</a>
+      </nav>
+    </header>
+    
+    <main>
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Gerando PDF...</p>
+      </div>
+      
+      <!-- Versão Detalhada -->
+      <div id="detailed-version">
+        <section id="introducao">
+          <h2>Introdução</h2>
+          <div class="editable" contenteditable="true" data-placeholder="Escreva aqui a introdução do seu relatório. Comece apresentando o tema, contexto e objetivos do trabalho. Considere incluir: contexto do problema, justificativa, objetivos gerais e específicos, e metodologia utilizada.&#10;&#10;Exemplo de estrutura:&#10;• Contexto do problema ou tema&#10;• Justificativa para o estudo&#10;• Objetivos gerais e específicos&#10;• Metodologia utilizada"></div>
+        </section>
+
+        <section id="desenvolvimento">
+          <h2>Desenvolvimento</h2>
+          
+          <div class="editable" contenteditable="true" data-placeholder="Desenvolva aqui o conteúdo principal do seu relatório. Estruture em seções claras:&#10;&#10;• Descrição do Contexto/Demanda: Detalhe o contexto ou a demanda escolhida, explicando as circunstâncias que motivaram este estudo ou intervenção.&#10;&#10;• Objetivos: Defina claramente os objetivos do atendimento, tanto os objetivos gerais quanto os específicos.&#10;&#10;• Possibilidades de Atuação: Explore e analise as diferentes possibilidades de atuação no caso, considerando alternativas e suas implicações.&#10;&#10;• Estudo de Caso: Apresente um exemplo prático que ilustre os conceitos discutidos ou demonstre a aplicação das metodologias propostas.&#10;&#10;Seja objetivo e use linguagem técnica apropriada."></div>
+        </section>
+
+        <section id="consideracoes">
+          <h2>Considerações Finais</h2>
+          <div class="editable" contenteditable="true" data-placeholder="Escreva aqui suas considerações finais. Reflita sobre os resultados obtidos, aprendizados, limitações do estudo e sugestões para trabalhos futuros. Esta seção deve sintetizar as principais descobertas e conclusões do trabalho.&#10;&#10;Considere abordar:&#10;• Principais descobertas ou conclusões&#10;• Limitações do estudo&#10;• Sugestões para trabalhos futuros&#10;• Impacto e relevância dos resultados"></div>
+        </section>
+
+        <section id="referencias">
+          <h2>Referências Bibliográficas</h2>
+          <div class="editable" contenteditable="true" data-placeholder="Liste aqui todas as fontes consultadas seguindo as normas ABNT. Inclua livros, artigos, sites e outras referências utilizadas no desenvolvimento do relatório.&#10;&#10;Exemplos de formatação ABNT:&#10;• SOBRENOME, Nome. Título da obra. Edição. Local: Editora, ano.&#10;• SOBRENOME, Nome. Título do artigo. Nome do Periódico, local, volume(número), páginas, mês/ano.&#10;• SOBRENOME, Nome. Título do trabalho. Ano. Dissertação (Mestrado) ou Tese (Doutorado) - Instituição, local, ano."></div>
+        </section>
+      </div>
+      
+      <!-- Versão Simples -->
+      <div id="simple-version" class="simple-version">
+        <section id="conteudo-geral">
+          <h2>Conteúdo do Relatório</h2>
+          
+          <div class="formatting-toolbar">
+            <button onclick="formatText('bold')" title="Negrito (Ctrl+B)">B</button>
+            <button onclick="formatText('italic')" title="Itálico (Ctrl+I)">I</button>
+            <button onclick="formatText('underline')" title="Sublinhado (Ctrl+U)">U</button>
+            <span style="width: 1px; height: 20px; background: #ddd; margin: 0 5px;"></span>
+            <button onclick="insertHeading('h3')" title="Título 3">H3</button>
+            <button onclick="insertHeading('h4')" title="Título 4">H4</button>
+            <button onclick="insertList('ul')" title="Lista não ordenada">•</button>
+            <button onclick="insertList('ol')" title="Lista ordenada">1.</button>
+            <button onclick="insertBlockquote()" title="Citação">"</button>
+            <span style="width: 1px; height: 20px; background: #ddd; margin: 0 5px;"></span>
+            <button onclick="insertTemplate()" title="Inserir template">📋</button>
+            <div class="word-count" id="wordCount">0 palavras</div>
+          </div>
+          
+          <div class="editable" contenteditable="true" id="simpleContent" data-placeholder="Escreva aqui todo o conteúdo do seu relatório de forma livre e organizada.&#10;&#10;Dicas de estruturação:&#10;• Comece com uma introdução clara&#10;• Desenvolva o tema principal&#10;• Apresente análises e discussões&#10;• Conclua com considerações finais&#10;• Inclua referências se necessário&#10;&#10;Use a barra de formatação acima para destacar títulos, listas e citações importantes.&#10;&#10;Organize o texto em parágrafos bem estruturados e use linguagem clara e objetiva."></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Botão flutuante de ajuda -->
+  <button class="help-button" id="helpButton" onclick="showHelpModal()">!</button>
+
+  <!-- Modal de ajuda -->
+  <div class="modal" id="helpModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Dicas de Preenchimento</div>
+        <button class="close-modal" onclick="closeHelpModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Conteúdo será preenchido dinamicamente -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Função para exportar como PDF
+    async function exportToPDF() {
+      const loading = document.getElementById('loading');
+      const btnExport = document.querySelector('.btn-export');
+      
+      // Mostrar loading
+      loading.style.display = 'block';
+      btnExport.disabled = true;
+      btnExport.textContent = 'Gerando...';
+      
+      try {
+        // Ocultar elementos que não devem aparecer no PDF
+        const headerActions = document.querySelector('.header-actions');
+        const nav = document.querySelector('nav');
+        const reportTypeSelector = document.querySelector('.report-type-selector');
+        const helpButton = document.getElementById('helpButton');
+        headerActions.style.display = 'none';
+        nav.style.display = 'none';
+        reportTypeSelector.style.display = 'none';
+        if (helpButton) helpButton.style.display = 'none';
+        
+        // Criar PDF com layout organizado
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Obter a fonte selecionada
+        const selectedFont = document.getElementById('fontFamily').value;
+        let pdfFont = 'helvetica'; // Fonte padrão do jsPDF
+        
+        // Mapear fontes para as disponíveis no jsPDF
+        const fontMapping = {
+          'arial': 'helvetica',
+          'times': 'times',
+          'helvetica': 'helvetica',
+          'georgia': 'times', // Georgia não disponível, usar Times
+          'verdana': 'helvetica', // Verdana não disponível, usar Helvetica
+          'courier': 'courier'
+        };
+        
+        pdfFont = fontMapping[selectedFont] || 'helvetica';
+        
+        // Configurações de página
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 20;
+        const contentWidth = pageWidth - (2 * margin);
+        
+        // Obter dados do relatório
+        const title = document.querySelector('h1').textContent || 'Relatório';
+        const author = 'Autor: ' + document.querySelector('.autor').textContent.replace('Autor: ', '') || 'Nome do Autor';
+        const professor = 'Professor: ' + document.querySelector('.professor').textContent.replace('Professor: ', '') || 'Nome do Professor';
+        const currentDate = new Date().toLocaleDateString('pt-BR');
+        
+        let yPosition = margin;
+        
+        // Primeira página - Cabeçalho
+        // Título no topo
+        pdf.setFontSize(18);
+        pdf.setFont(pdfFont, 'bold');
+        pdf.text(title, pageWidth / 2, yPosition, { align: 'center' });
+        yPosition += 30;
+        
+        // Autor e Professor exatamente no centro da página
+        const centerY = pageHeight / 2;
+        pdf.setFontSize(12);
+        pdf.setFont(pdfFont, 'normal');
+        pdf.text(author, pageWidth / 2, centerY - 10, { align: 'center' });
+        pdf.text(professor, pageWidth / 2, centerY + 10, { align: 'center' });
+        
+        // Data no final da primeira página
+        pdf.setFontSize(10);
+        pdf.setFont(pdfFont, 'normal');
+        pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+        
+        // Conteúdo baseado no tipo de relatório - COMEÇA NA SEGUNDA PÁGINA
+        const reportType = document.getElementById('reportType').value;
+        
+        if (reportType === 'detailed') {
+          // Versão detalhada
+          const sections = [
+            { id: 'introducao', title: 'Introdução' },
+            { id: 'desenvolvimento', title: 'Desenvolvimento' },
+            { id: 'consideracoes', title: 'Considerações Finais' },
+            { id: 'referencias', title: 'Referências Bibliográficas' }
+          ];
+          
+          for (let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            const sectionElement = document.getElementById(section.id);
+            
+            if (sectionElement) {
+              const content = sectionElement.querySelector('.editable').textContent.trim();
+              
+              if (content) {
+                // Sempre começar na segunda página para o primeiro conteúdo
+                if (i === 0) {
+                  pdf.addPage();
+                  yPosition = margin;
+                  // Data no final de cada página
+                  pdf.setFontSize(10);
+                  pdf.setFont(pdfFont, 'normal');
+                  pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+                } else {
+                  // Verificar se precisa de nova página para seções subsequentes
+                  if (yPosition > pageHeight - 60) {
+                    pdf.addPage();
+                    yPosition = margin;
+                    // Data no final de cada página
+                    pdf.setFontSize(10);
+                    pdf.setFont(pdfFont, 'normal');
+                    pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+                  }
+                }
+                
+                // Título da seção
+                pdf.setFontSize(14);
+                pdf.setFont(pdfFont, 'bold');
+                pdf.text(section.title, margin, yPosition);
+                yPosition += 15;
+                
+                // Conteúdo da seção
+                pdf.setFontSize(11);
+                pdf.setFont(pdfFont, 'normal');
+                
+                // Quebrar texto em linhas
+                const lines = pdf.splitTextToSize(content, contentWidth);
+                
+                for (let j = 0; j < lines.length; j++) {
+                  // Verificar se precisa de nova página
+                  if (yPosition > pageHeight - 40) {
+                    pdf.addPage();
+                    yPosition = margin;
+                    // Data no final de cada página
+                    pdf.setFontSize(10);
+                    pdf.setFont(pdfFont, 'normal');
+                    pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+                  }
+                  
+                  pdf.text(lines[j], margin, yPosition);
+                  yPosition += 6;
+                }
+                
+                yPosition += 10; // Espaço entre seções
+              }
+            }
+          }
+        } else {
+          // Versão simples - COMEÇA NA SEGUNDA PÁGINA
+          const simpleContent = document.getElementById('simpleContent');
+          if (simpleContent) {
+            const content = simpleContent.textContent.trim();
+            
+            if (content) {
+              // Sempre começar na segunda página
+              pdf.addPage();
+              yPosition = margin;
+              // Data no final de cada página
+              pdf.setFontSize(10);
+              pdf.setFont(pdfFont, 'normal');
+              pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+              
+              // Título da seção
+              pdf.setFontSize(14);
+              pdf.setFont(pdfFont, 'bold');
+              pdf.text('Conteúdo do Relatório', margin, yPosition);
+              yPosition += 15;
+              
+              // Conteúdo
+              pdf.setFontSize(11);
+              pdf.setFont(pdfFont, 'normal');
+              
+              // Quebrar texto em linhas
+              const lines = pdf.splitTextToSize(content, contentWidth);
+              
+              for (let j = 0; j < lines.length; j++) {
+                // Verificar se precisa de nova página
+                if (yPosition > pageHeight - 40) {
+                  pdf.addPage();
+                  yPosition = margin;
+                  // Data no final de cada página
+                  pdf.setFontSize(10);
+                  pdf.setFont(pdfFont, 'normal');
+                  pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+                }
+                
+                pdf.text(lines[j], margin, yPosition);
+                yPosition += 6;
+              }
+            }
+          }
+        }
+        
+        // Salvar PDF
+        const fileName = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+        pdf.save(fileName);
+        
+      } catch (error) {
+        console.error('Erro ao gerar PDF:', error);
+        alert('Erro ao gerar PDF. Tente novamente.');
+      } finally {
+        // Restaurar elementos
+        const headerActions = document.querySelector('.header-actions');
+        const nav = document.querySelector('nav');
+        const reportTypeSelector = document.querySelector('.report-type-selector');
+        const helpButton = document.getElementById('helpButton');
+        headerActions.style.display = 'block';
+        nav.style.display = 'flex';
+        reportTypeSelector.style.display = 'block';
+        if (helpButton) helpButton.style.display = 'block';
+        
+        // Ocultar loading
+        loading.style.display = 'none';
+        btnExport.disabled = false;
+        btnExport.textContent = 'Exportar PDF';
+      }
+    }
+    
+    // Função para mudar o tipo de relatório
+    function changeReportType() {
+      const reportType = document.getElementById('reportType').value;
+      const detailedVersion = document.getElementById('detailed-version');
+      const simpleVersion = document.getElementById('simple-version');
+      const navDetailed = document.querySelector('.nav-detailed');
+      
+      if (reportType === 'detailed') {
+        detailedVersion.style.display = 'block';
+        simpleVersion.style.display = 'none';
+        navDetailed.style.display = 'block';
+      } else {
+        detailedVersion.style.display = 'none';
+        simpleVersion.style.display = 'block';
+        navDetailed.style.display = 'none';
+      }
+    }
+    
+    // Funções de formatação para a versão simples
+    function formatText(command) {
+      document.execCommand(command, false, null);
+      updateWordCount();
+    }
+
+    function insertHeading(level) {
+      const selection = document.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const newElement = document.createElement(level);
+        newElement.textContent = 'Título ' + level.toUpperCase();
+        range.insertNode(newElement);
+        range.setStartAfter(newElement);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        updateWordCount();
+      }
+    }
+
+    function insertList(type) {
+      const selection = document.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const list = document.createElement(type);
+        const li = document.createElement('li');
+        li.textContent = 'Item da lista';
+        list.appendChild(li);
+        range.insertNode(list);
+        updateWordCount();
+      }
+    }
+
+    function insertBlockquote() {
+      const selection = document.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const blockquote = document.createElement('blockquote');
+        blockquote.textContent = 'Sua citação aqui...';
+        range.insertNode(blockquote);
+        updateWordCount();
+      }
+    }
+
+    function insertTemplate() {
+      const template = `
+        <h3>Introdução</h3>
+        <p>Aqui você pode escrever a introdução do seu relatório. Comece apresentando o tema, contexto e objetivos do trabalho.</p>
+        
+        <h3>Desenvolvimento</h3>
+        <p>Aqui você pode escrever o conteúdo principal do seu relatório. Estruture em seções claras e seja objetivo.</p>
+        
+        <h3>Considerações Finais</h3>
+        <p>Aqui você pode escrever suas considerações finais. Reflita sobre os resultados obtidos e aprendizados.</p>
+        
+        <h3>Referências Bibliográficas</h3>
+        <p>Liste aqui todas as fontes consultadas seguindo as normas ABNT.</p>
+      `;
+      const selection = document.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const newDiv = document.createElement('div');
+        newDiv.innerHTML = template;
+        range.insertNode(newDiv);
+        updateWordCount();
+      }
+    }
+
+    function updateWordCount() {
+      const editable = document.getElementById('simpleContent');
+      if (editable) {
+        const text = editable.textContent;
+        const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+        const wordCountElement = document.getElementById('wordCount');
+        if (wordCountElement) {
+          wordCountElement.textContent = `${words.length} palavras`;
+        }
+      }
+    }
+    
+    // Variáveis globais para o sistema de ajuda
+    let currentHelpContent = '';
+    let helpButtonVisible = false;
+    
+    // Função para mostrar o modal de ajuda
+    function showHelpModal() {
+      const modal = document.getElementById('helpModal');
+      const modalBody = document.getElementById('modalBody');
+      modalBody.innerHTML = currentHelpContent;
+      modal.style.display = 'block';
+    }
+    
+    // Função para fechar o modal de ajuda
+    function closeHelpModal() {
+      const modal = document.getElementById('helpModal');
+      modal.style.display = 'none';
+    }
+    
+    // Função para mostrar/esconder o botão de ajuda
+    function toggleHelpButton(show) {
+      const helpButton = document.getElementById('helpButton');
+      if (show && !helpButtonVisible) {
+        helpButton.style.display = 'block';
+        helpButtonVisible = true;
+      } else if (!show && helpButtonVisible) {
+        helpButton.style.display = 'none';
+        helpButtonVisible = false;
+      }
+    }
+    
+    // Função para definir o conteúdo de ajuda baseado no campo ativo
+    function setHelpContent(fieldId) {
+      const helpContents = {
+        'introducao': `
+          <h3>Como escrever uma boa Introdução:</h3>
+          <p>A introdução deve contextualizar o leitor sobre o assunto abordado e estabelecer a relevância do trabalho.</p>
+          
+          <h3>Estrutura sugerida:</h3>
+          <ul>
+            <li><strong>Contexto do problema ou tema:</strong> Apresente o cenário que motivou o estudo</li>
+            <li><strong>Justificativa para o estudo:</strong> Explique por que o tema é importante</li>
+            <li><strong>Objetivos gerais e específicos:</strong> Defina claramente o que se pretende alcançar</li>
+            <li><strong>Metodologia utilizada:</strong> Descreva brevemente como o trabalho foi desenvolvido</li>
+          </ul>
+          
+          <h3>Dicas importantes:</h3>
+          <ul>
+            <li>Seja claro e objetivo</li>
+            <li>Use linguagem acadêmica apropriada</li>
+            <li>Mantenha um tom profissional</li>
+            <li>Evite informações desnecessárias</li>
+          </ul>
+        `,
+        'desenvolvimento': `
+          <h3>Como estruturar o Desenvolvimento:</h3>
+          <p>Esta é a parte principal do seu relatório, onde você desenvolve o conteúdo de forma detalhada.</p>
+          
+          <h3>Seções recomendadas:</h3>
+          <ul>
+            <li><strong>Descrição do Contexto/Demanda:</strong> Detalhe as circunstâncias que motivaram o estudo</li>
+            <li><strong>Objetivos:</strong> Defina claramente os objetivos gerais e específicos</li>
+            <li><strong>Possibilidades de Atuação:</strong> Explore alternativas e suas implicações</li>
+            <li><strong>Estudo de Caso:</strong> Apresente exemplos práticos quando possível</li>
+          </ul>
+          
+          <h3>Dicas de escrita:</h3>
+          <ul>
+            <li>Use linguagem técnica apropriada</li>
+            <li>Seja objetivo e direto</li>
+            <li>Organize as ideias em parágrafos lógicos</li>
+            <li>Use exemplos para ilustrar conceitos</li>
+          </ul>
+        `,
+        'consideracoes': `
+          <h3>Como escrever Considerações Finais:</h3>
+          <p>Esta seção deve sintetizar as principais descobertas e conclusões do trabalho.</p>
+          
+          <h3>Elementos importantes:</h3>
+          <ul>
+            <li><strong>Principais descobertas:</strong> Destaque os achados mais relevantes</li>
+            <li><strong>Limitações do estudo:</strong> Seja honesto sobre as limitações</li>
+            <li><strong>Sugestões para trabalhos futuros:</strong> Indique possíveis continuidades</li>
+            <li><strong>Impacto e relevância:</strong> Explique a importância dos resultados</li>
+          </ul>
+          
+          <h3>Dicas para conclusões:</h3>
+          <ul>
+            <li>Seja conciso mas abrangente</li>
+            <li>Evite introduzir novos conceitos</li>
+            <li>Reconecte com os objetivos iniciais</li>
+            <li>Mantenha um tom reflexivo</li>
+          </ul>
+        `,
+        'referencias': `
+          <h3>Como formatar Referências Bibliográficas:</h3>
+          <p>Liste todas as fontes consultadas seguindo as normas ABNT.</p>
+          
+          <h3>Formatos principais:</h3>
+          <ul>
+            <li><strong>Livros:</strong> SOBRENOME, Nome. Título da obra. Edição. Local: Editora, ano.</li>
+            <li><strong>Artigos:</strong> SOBRENOME, Nome. Título do artigo. Nome do Periódico, local, volume(número), páginas, mês/ano.</li>
+            <li><strong>Teses/Dissertações:</strong> SOBRENOME, Nome. Título do trabalho. Ano. Dissertação (Mestrado) ou Tese (Doutorado) - Instituição, local, ano.</li>
+          </ul>
+          
+          <h3>Dicas importantes:</h3>
+          <ul>
+            <li>Liste apenas as fontes realmente consultadas</li>
+            <li>Mantenha ordem alfabética por sobrenome</li>
+            <li>Use itálico para títulos de obras</li>
+            <li>Verifique a formatação ABNT atualizada</li>
+          </ul>
+        `,
+        'simple': `
+          <h3>Como usar a Versão Simples:</h3>
+          <p>Esta versão permite total liberdade de estruturação do seu relatório.</p>
+          
+          <h3>Dicas de estruturação:</h3>
+          <ul>
+            <li><strong>Comece com uma introdução clara</strong> que apresente o tema</li>
+            <li><strong>Desenvolva o tema principal</strong> de forma organizada</li>
+            <li><strong>Apresente análises e discussões</strong> sobre o assunto</li>
+            <li><strong>Conclua com considerações finais</strong> que sintetizem o trabalho</li>
+            <li><strong>Inclua referências</strong> se necessário</li>
+          </ul>
+          
+          <h3>Ferramentas disponíveis:</h3>
+          <ul>
+            <li>Use a barra de formatação para destacar títulos</li>
+            <li>Crie listas ordenadas e não ordenadas</li>
+            <li>Use citações para destacar informações importantes</li>
+            <li>Utilize o template para começar com uma estrutura básica</li>
+          </ul>
+          
+          <h3>Dicas de escrita:</h3>
+          <ul>
+            <li>Organize o texto em parágrafos bem estruturados</li>
+            <li>Use linguagem clara e objetiva</li>
+            <li>Mantenha coerência entre as seções</li>
+            <li>Revise o texto antes de finalizar</li>
+          </ul>
+        `
+      };
+      
+      currentHelpContent = helpContents[fieldId] || helpContents['simple'];
+    }
+    
+    // Função para mudar a fonte
+    function changeFont() {
+      const selectedFont = document.getElementById('fontFamily').value;
+      document.body.classList.remove('font-arial', 'font-times', 'font-helvetica', 'font-georgia', 'font-verdana', 'font-courier');
+      document.body.classList.add('font-' + selectedFont);
+      
+      // Salvar no localStorage
+      localStorage.setItem('selectedFont', selectedFont);
+    }
+
+    // Melhorar a experiência de edição
+    document.addEventListener('DOMContentLoaded', function() {
+      const data = document.querySelector('.data');
+      const autor = document.querySelector('.autor');
+      const professor = document.querySelector('.professor');
+      const nome_prof = localStorage.getItem('nome_prof');
+      if (nome_prof) {
+        professor.textContent = 'Professor: ' + nome_prof;
+      }
+      const nome_aluno = localStorage.getItem('nome_aluno');
+      if (nome_aluno) {
+        autor.textContent = 'Autor: ' + nome_aluno;
+      }
+      data.textContent = 'Data: ' + new Date().toLocaleDateString('pt-BR');
+      
+      // Carregar fonte salva
+      const savedFont = localStorage.getItem('selectedFont');
+      if (savedFont) {
+        document.getElementById('fontFamily').value = savedFont;
+        changeFont();
+      }
+      
+      // Salvar dados quando editados
+      autor.addEventListener('blur', function() {
+        const nome = this.textContent.replace('Autor: ', '').trim();
+        if (nome && nome !== 'Nome do Autor') {
+          localStorage.setItem('nome_aluno', nome);
+        }
+      });
+      
+      professor.addEventListener('blur', function() {
+        const nome = this.textContent.replace('Professor: ', '').trim();
+        if (nome && nome !== 'Nome do Professor') {
+          localStorage.setItem('nome_prof', nome);
+        }
+      });
+      
+      const editables = document.querySelectorAll('[contenteditable="true"]');
+      
+      editables.forEach(element => {
+        element.addEventListener('focus', function() {
+          this.style.borderColor = '#333';
+          this.style.background = '#ffffff';
+          
+          // Limpar conteúdo inicial se for o texto padrão
+          if (this.textContent.trim() === 'Título do Relatório' || 
+              this.textContent.trim() === 'Autor: Nome do Autor' ||
+              this.textContent.trim() === 'Data: dd/mm/aaaa') {
+            this.textContent = '';
+          }
+          
+          // Identificar qual campo está ativo e definir conteúdo de ajuda
+          let fieldId = 'simple';
+          if (this.closest('#introducao')) fieldId = 'introducao';
+          else if (this.closest('#desenvolvimento')) fieldId = 'desenvolvimento';
+          else if (this.closest('#consideracoes')) fieldId = 'consideracoes';
+          else if (this.closest('#referencias')) fieldId = 'referencias';
+          else if (this.id === 'simpleContent') fieldId = 'simple';
+          
+          setHelpContent(fieldId);
+        });
+        
+        element.addEventListener('blur', function() {
+          this.style.borderColor = '#ddd';
+          this.style.background = '#fafafa';
+          
+          // Esconder botão de ajuda quando sair do campo
+          setTimeout(() => {
+            if (!document.querySelector('[contenteditable="true"]:focus')) {
+              toggleHelpButton(false);
+            }
+          }, 100);
+        });
+        
+        // Manter placeholder visível quando vazio
+        element.addEventListener('input', function() {
+          if (this.textContent.trim() === '') {
+            this.classList.add('empty');
+          } else {
+            this.classList.remove('empty');
+          }
+          
+          // Mostrar botão de ajuda quando começar a escrever
+          if (this.textContent.trim().length > 0) {
+            toggleHelpButton(true);
+          }
+        });
+      });
+      
+      // Navegação suave
+      document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetElement = document.getElementById(targetId);
+          
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+      
+      // Event listeners para a versão simples
+      const simpleContent = document.getElementById('simpleContent');
+      if (simpleContent) {
+        simpleContent.addEventListener('input', updateWordCount);
+        simpleContent.addEventListener('keydown', function(e) {
+          // Atalhos de teclado
+          if (e.ctrlKey) {
+            switch(e.key) {
+              case 'b':
+                e.preventDefault();
+                formatText('bold');
+                break;
+              case 'i':
+                e.preventDefault();
+                formatText('italic');
+                break;
+              case 'u':
+                e.preventDefault();
+                formatText('underline');
+                break;
+            }
+          }
+        });
+        
+        // Atualizar contador inicial
+        updateWordCount();
+      }
+      
+      // Fechar modal quando clicar fora dele
+      window.addEventListener('click', function(event) {
+        const modal = document.getElementById('helpModal');
+        if (event.target === modal) {
+          closeHelpModal();
+        }
+      });
+      
+      // Fechar modal com tecla ESC
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeHelpModal();
+        }
+      });
+      
+      // Melhorias para mobile
+      function isMobile() {
+        return window.innerWidth <= 768;
+      }
+      
+      // Otimizar para dispositivos móveis
+      if (isMobile()) {
+        // Aumentar área de toque para botões
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+          button.style.minHeight = '44px';
+          button.style.minWidth = '44px';
+        });
+        
+        // Melhorar experiência de digitação em mobile
+        const editables = document.querySelectorAll('[contenteditable="true"]');
+        editables.forEach(element => {
+          element.addEventListener('touchstart', function() {
+            // Garantir que o teclado virtual apareça
+            this.focus();
+          });
+          
+          element.addEventListener('input', function() {
+            // Scroll automático para manter o campo visível
+            setTimeout(() => {
+              this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+          });
+        });
+        
+        // Melhorar navegação em mobile
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+              // Scroll mais suave em mobile
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+              
+              // Adicionar feedback visual
+              this.style.background = 'rgba(255,255,255,0.3)';
+              setTimeout(() => {
+                this.style.background = '';
+              }, 500);
+            }
+          });
+        });
+        
+        // Otimizar modal para mobile
+        const modal = document.getElementById('helpModal');
+        if (modal) {
+          modal.addEventListener('touchmove', function(e) {
+            // Permitir scroll dentro do modal
+            e.stopPropagation();
+          });
+        }
+        
+        // Melhorar botão de ajuda em mobile
+        const helpButton = document.getElementById('helpButton');
+        if (helpButton) {
+          helpButton.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+          });
+          
+          helpButton.addEventListener('touchend', function() {
+            this.style.transform = '';
+          });
+        }
+        
+        // Adicionar feedback tátil para campos editáveis
+        editables.forEach(element => {
+          element.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+          });
+          
+          element.addEventListener('touchend', function() {
+            this.style.transform = '';
+          });
+        });
+      }
+      
+      // Detectar mudança de orientação
+      window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+          // Reajustar layout após mudança de orientação
+          const activeElement = document.querySelector('[contenteditable="true"]:focus');
+          if (activeElement) {
+            activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 500);
+      });
+    });
+  </script>
+</body>
+</html>
