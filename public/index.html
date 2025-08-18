@@ -120,10 +120,12 @@
               <!-- Opção de Áudio -->
               <div class="ia-option audio-option">
                 <h4>🎤 Gravação de Áudio</h4>
-                <p>Grave um áudio explicando seu relatório e a IA criará o conteúdo para você</p>
+                <p>Grave um ou mais áudios explicando seu relatório e a IA criará o conteúdo para você</p>
                 <div class="audio-notice" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 12px; color: #856404;">
-                  <strong>💡 Dica:</strong> Atualmente, o áudio é usado como referência. Para melhores resultados, também descreva brevemente o conteúdo no campo de texto abaixo.
-          </div>
+                  <strong>💡 Dica:</strong> Você pode gravar múltiplos áudios. Cada gravação será transcrita separadamente e todas serão combinadas na geração do relatório.
+                </div>
+                
+                <!-- Controles de Gravação -->
                 <div class="audio-controls">
                   <div class="tooltip">
                     <button id="recordBtn" class="btn-record" onclick="toggleRecording()" aria-label="Iniciar gravação">
@@ -142,57 +144,33 @@
                     <span class="tooltip-text" id="recordTooltip">Clique para iniciar gravação</span>
                   </div>
                   
-                  <div class="tooltip">
-                    <button id="playBtn" class="btn-play" onclick="playRecording()" aria-label="Reproduzir" disabled>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                           aria-hidden="true" class="lucide lucide-play">
-                        <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                      </svg>
-                      <span class="sr-only">Reproduzir</span>
-                    </button>
-                    <span class="tooltip-text" id="playTooltip">Reproduzir áudio gravado</span>
-                  </div>
-                  
-                  <div class="tooltip">
-                    <button id="transcribeBtn" class="btn-transcribe" onclick="transcribeAudio()" aria-label="Transcrever áudio" disabled style="display: none;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                           aria-hidden="true" class="lucide lucide-file-text">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7.5z"></path>
-                        <path d="M14 2v6h6"></path>
-                        <path d="M16 13H8"></path>
-                        <path d="M16 17H8"></path>
-                        <path d="M10 9H8"></path>
-                      </svg>
-                      <span class="sr-only">Transcrever Áudio</span>
-                    </button>
-                    <span class="tooltip-text" id="transcribeTooltip">Converter áudio em texto</span>
-                  </div>
-                  
                   <div class="recording-info">
                     <span id="recordingTime">00:00</span>
                     <div class="audio-visualizer" id="audioVisualizer"></div>
                   </div>
                 </div>
-                <audio id="audioPlayback" controls style="display: none;"></audio>
-                <!-- Área para mostrar transcrição -->
-                <div id="transcriptionArea" style="display: none; margin-top: 15px;">
-                  <h5 style="color: #333; margin-bottom: 10px;">📝 Transcrição do Áudio:</h5>
-                  <div id="transcriptionText" style="background: #f8f9fa; border: 1px solid #ddd; padding: 12px; border-radius: 4px; font-size: 14px; line-height: 1.5; max-height: 150px; overflow-y: auto;"></div>
-                  <div style="margin-top: 8px; font-size: 12px; color: #666;">
-                    <em>A transcrição será combinada com sua descrição em texto para gerar o relatório.</em>
-                  </div>
+                
+                <!-- Container para múltiplos áudios -->
+                <div id="audioRecordingsContainer" class="audio-recordings-container">
+                  <!-- Os áudios gravados serão inseridos aqui dinamicamente -->
                 </div>
               </div>
 
               <!-- Opção de Texto -->
               <div class="ia-option text-option">
                 <h4>✍️ Descrição por Texto</h4>
-                <p>Descreva brevemente o que você quer no relatório</p>
-                <textarea id="textDescription" placeholder="Ex: Quero um relatório sobre sustentabilidade empresarial, incluindo conceitos básicos, benefícios, desafios e exemplos práticos..." rows="4"></textarea>
+                <p>Descreva completamente o que você quer no relatório. Seja específico e inclua todos os detalhes necessários.</p>
+                <div class="text-description-notice" style="background: #e7f3ff; border: 1px solid #b3d9ff; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 12px; color: #004085;">
+                  <strong>💡 Você pode incluir:</strong>
+                  <ul style="margin: 5px 0; padding-left: 20px;">
+                    <li>Descrição completa do relatório ou apenas tópicos específicos</li>
+                    <li>Links e URLs para referências</li>
+                    <li>Nomes de autores, livros ou artigos específicos</li>
+                    <li>Dados, estatísticas ou informações específicas</li>
+                    <li>Estrutura desejada (introdução, desenvolvimento, conclusão, etc.)</li>
+                  </ul>
+                </div>
+                <textarea id="textDescription" placeholder="Ex: Quero um relatório sobre sustentabilidade empresarial, incluindo conceitos básicos, benefícios, desafios e exemplos práticos. Usar como referência o livro 'Green Business' de John Smith e o artigo disponível em https://exemplo.com/sustentabilidade. Incluir dados da ONU sobre mudanças climáticas e casos de sucesso da empresa Patagonia..." rows="6"></textarea>
               </div>
 
               <!-- Configurações -->
@@ -379,6 +357,36 @@
             <span class="version-number">2.0.6</span>
             <span class="version-date">Agosto 2025</span>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Alerta Personalizado -->
+  <div class="modal" id="customAlertModal">
+    <div class="modal-content custom-alert-content">
+      <div class="modal-header">
+        <div class="modal-title" id="alertTitle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               id="alertIcon" style="margin-right: 8px;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span id="alertTitleText">Alerta</span>
+        </div>
+        <button class="close-modal" onclick="closeCustomAlert()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="alertMessage" class="alert-message">
+          <!-- Mensagem será inserida aqui -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="alert-buttons" id="alertButtons">
+          <!-- Botões serão inseridos aqui -->
         </div>
       </div>
     </div>

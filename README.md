@@ -107,3 +107,6 @@ Sugestões e melhorias são bem-vindas! Entre em contato para colaborar.
 ---
 
 **Versão**: 2.0.6 | **Data**: Agosto 2025
+
+
+  

