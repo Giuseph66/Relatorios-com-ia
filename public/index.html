@@ -11,387 +11,389 @@
 </head>
 <body>
   <div class="container">
-    <header>
-      <div class="header-actions">
-        <button class="btn-export" onclick="exportToPDF()">
-          Exportar PDF
-        </button>
-      </div>
-      
-      <div class="font-selector">
-        <label for="fontFamily">Fonte:</label>
-        <select id="fontFamily" onchange="changeFont()">
-          <option value="arial">Arial</option>
-          <option value="times">Times New Roman</option>
-          <option value="helvetica">Helvetica</option>
-          <option value="georgia">Georgia</option>
-          <option value="verdana">Verdana</option>
-          <option value="courier">Courier New</option>
-        </select>
-      </div>
-      
-      <h1 contenteditable="true" data-placeholder="Digite o título do seu relatório aqui...">Título do Relatório</h1>
-      <p contenteditable="true" data-placeholder="Digite o nome do autor..." class="autor">Autor: Nome do Autor</p>
-      <p contenteditable="true" data-placeholder="Digite o nome do professor..." class="professor">Professor: Nome do Professor</p>
-      <p contenteditable="true" data-placeholder="Digite a data (ex: 15/12/2024)..." class="data">Data:</p>
-      
-      <div class="report-type-selector">
-        <label for="reportType">Tipo de Relatório:</label>
-        <select id="reportType" onchange="changeReportType()">
-          <option value="detailed">Detalhado</option>
-          <option value="simple">Simples</option>
-        </select>
-      </div>
-      <nav class="nav-detailed">
-        <a href="#introducao">Introdução</a>
-        <a href="#desenvolvimento">Desenvolvimento</a>
-        <a href="#consideracoes">Considerações Finais</a>
-        <a href="#referencias">Referências</a>
-      </nav>
-      
-    </header>
-    
-    <main>
-      <div class = "ia-button">
-        <div class="tooltip">
-        <button class="btn-ia" onclick="generateReport()">
-          <img src="https://img.icons8.com/ios/50/000000/artificial-intelligence.png"/>
-        </button>
-          <span class="tooltip-text">Gerar relatório com IA</span>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-actions">
+          <button class="btn-export" onclick="exportToPDF()">
+            Exportar PDF
+          </button>
         </div>
-      </div>
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Gerando PDF...</p>
-      </div>
-      
-      <!-- Versão Detalhada -->
-      <div id="detailed-version">
-        <div class="word-count-detailed" id="totalWordCount" style="text-align: center; margin-bottom: 20px; font-weight: bold; background: #e7f3ff; border-color: #b3d9ff;">Total: 0 palavras</div>
         
-        <section id="introducao">
-          <h2>Introdução</h2>
-          <div class="word-count-detailed" id="wordCountIntroducao">0 palavras</div>
-          <div class="editable" contenteditable="true" data-placeholder="Escreva aqui a introdução do seu relatório. Comece apresentando o tema, contexto e objetivos do trabalho. Considere incluir: contexto do problema, justificativa, objetivos gerais e específicos, e metodologia utilizada.&#10;&#10;Exemplo de estrutura:&#10;• Contexto do problema ou tema&#10;• Justificativa para o estudo&#10;• Objetivos gerais e específicos&#10;• Metodologia utilizada"></div>
-        </section>
-
-        <section id="desenvolvimento">
-          <h2>Desenvolvimento</h2>
-          <div class="word-count-detailed" id="wordCountDesenvolvimento">0 palavras</div>
-          
-          <div class="editable" contenteditable="true" data-placeholder="Desenvolva aqui o conteúdo principal do seu relatório. Estruture em seções claras:&#10;&#10;• Descrição do Contexto/Demanda: Detalhe o contexto ou a demanda escolhida, explicando as circunstâncias que motivaram este estudo ou intervenção.&#10;&#10;• Objetivos: Defina claramente os objetivos do atendimento, tanto os objetivos gerais quanto os específicos.&#10;&#10;• Possibilidades de Atuação: Explore e analise as diferentes possibilidades de atuação no caso, considerando alternativas e suas implicações.&#10;&#10;• Estudo de Caso: Apresente um exemplo prático que ilustre os conceitos discutidos ou demonstre a aplicação das metodologias propostas.&#10;&#10;Seja objetivo e use linguagem técnica apropriada."></div>
-        </section>
-
-        <section id="consideracoes">
-          <h2>Considerações Finais</h2>
-          <div class="word-count-detailed" id="wordCountConsideracoes">0 palavras</div>
-          <div class="editable" contenteditable="true" data-placeholder="Escreva aqui suas considerações finais. Reflita sobre os resultados obtidos, aprendizados, limitações do estudo e sugestões para trabalhos futuros. Esta seção deve sintetizar as principais descobertas e conclusões do trabalho.&#10;&#10;Considere abordar:&#10;• Principais descobertas ou conclusões&#10;• Limitações do estudo&#10;• Sugestões para trabalhos futuros&#10;• Impacto e relevância dos resultados"></div>
-        </section>
-
-        <section id="referencias">
-          <h2>Referências Bibliográficas</h2>
-          <div class="word-count-detailed" id="wordCountReferencias">0 palavras</div>
-          <div class="editable" contenteditable="true" data-placeholder="Liste aqui todas as fontes consultadas seguindo as normas ABNT. Inclua livros, artigos, sites e outras referências utilizadas no desenvolvimento do relatório.&#10;&#10;Exemplos de formatação ABNT:&#10;• SOBRENOME, Nome. Título da obra. Edição. Local: Editora, ano.&#10;• SOBRENOME, Nome. Título do artigo. Nome do Periódico, local, volume(número), páginas, mês/ano.&#10;• SOBRENOME, Nome. Título do trabalho. Ano. Dissertação (Mestrado) ou Tese (Doutorado) - Instituição, local, ano."></div>
-        </section>
-      </div>
+        <div class="font-selector">
+          <label for="fontFamily">Fonte:</label>
+          <select id="fontFamily" onchange="changeFont()">
+            <option value="arial">Arial</option>
+            <option value="times">Times New Roman</option>
+            <option value="helvetica">Helvetica</option>
+            <option value="georgia">Georgia</option>
+            <option value="verdana">Verdana</option>
+            <option value="courier">Courier New</option>
+          </select>
+        </div>
+        
+        <h1 contenteditable="true" data-placeholder="Digite o título do seu relatório aqui...">Título do Relatório</h1>
+        <p contenteditable="true" data-placeholder="Digite o nome do autor..." class="autor">Autor: Nome do Autor</p>
+        <p contenteditable="true" data-placeholder="Digite o nome do professor..." class="professor">Professor: Nome do Professor</p>
+        <p contenteditable="true" data-placeholder="Digite a data (ex: 15/12/2024)..." class="data">Data:</p>
+        
+        <div class="report-type-selector">
+          <label for="reportType">Tipo de Relatório:</label>
+          <select id="reportType" onchange="changeReportType()">
+            <option value="detailed">Detalhado</option>
+            <option value="simple">Simples</option>
+          </select>
+        </div>
+        <nav class="nav-detailed">
+          <a href="#introducao">Introdução</a>
+          <a href="#desenvolvimento">Desenvolvimento</a>
+          <a href="#consideracoes">Considerações Finais</a>
+          <a href="#referencias">Referências</a>
+        </nav>
+        
+      </header>
       
-      <!-- Versão Simples -->
-      <div id="simple-version" class="simple-version">
-        <section id="conteudo-geral">
-          <h2>Conteúdo do Relatório</h2>
-          
-          <div class="formatting-toolbar">
-            <div class="word-count" id="wordCount">0 palavras</div>
+      <main>
+        <div class = "ia-button">
+          <div class="tooltip">
+          <button class="btn-ia" onclick="generateReport()">
+            <img src="https://img.icons8.com/ios/50/000000/artificial-intelligence.png"/>
+          </button>
+            <span class="tooltip-text">Gerar relatório com IA</span>
           </div>
+        </div>
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p>Gerando PDF...</p>
+        </div>
+        
+        <!-- Versão Detalhada -->
+        <div id="detailed-version">
+          <div class="word-count-detailed" id="totalWordCount" style="text-align: center; margin-bottom: 20px; font-weight: bold; background: #e7f3ff; border-color: #b3d9ff;">Total: 0 palavras</div>
           
-          <div class="editable" contenteditable="true" id="simpleContent" data-placeholder="Escreva aqui todo o conteúdo do seu relatório de forma livre e organizada.&#10;&#10;Dicas de estruturação:&#10;• Comece com uma introdução clara&#10;• Desenvolva o tema principal&#10;• Apresente análises e discussões&#10;• Conclua com considerações finais&#10;• Inclua referências se necessário&#10;&#10;Use a barra de formatação acima para destacar títulos, listas e citações importantes.&#10;&#10;Organize o texto em parágrafos bem estruturados e use linguagem clara e objetiva."></div>
-        </section>
-      </div>
-      <div id="modal-ia" class="modal">
-        <div class="modal-content modal-ia-content">
-          <div class="modal-header">
-            <div class="modal-title">Assistente de IA para Relatórios</div>
-            <button class="close-modal" onclick="closeIAModal()">&times;</button>
-          </div>
-          <div class="modal-body">
-            <div class="ia-options">
-              <h3>Como você gostaria de criar seu relatório?</h3>
-              
-              <!-- Opção de Áudio -->
-              <div class="ia-option audio-option">
-                <h4>🎤 Gravação de Áudio</h4>
-                <p>Grave um ou mais áudios explicando seu relatório e a IA criará o conteúdo para você</p>
-                <div class="audio-notice" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 12px; color: #856404;">
-                  <strong>💡 Dica:</strong> Você pode gravar múltiplos áudios. Cada gravação será transcrita separadamente e todas serão combinadas na geração do relatório.
-                </div>
+          <section id="introducao">
+            <h2>Introdução</h2>
+            <div class="word-count-detailed" id="wordCountIntroducao">0 palavras</div>
+            <div class="editable" contenteditable="true" data-placeholder="Escreva aqui a introdução do seu relatório. Comece apresentando o tema, contexto e objetivos do trabalho. Considere incluir: contexto do problema, justificativa, objetivos gerais e específicos, e metodologia utilizada.&#10;&#10;Exemplo de estrutura:&#10;• Contexto do problema ou tema&#10;• Justificativa para o estudo&#10;• Objetivos gerais e específicos&#10;• Metodologia utilizada"></div>
+          </section>
+  
+          <section id="desenvolvimento">
+            <h2>Desenvolvimento</h2>
+            <div class="word-count-detailed" id="wordCountDesenvolvimento">0 palavras</div>
+            
+            <div class="editable" contenteditable="true" data-placeholder="Desenvolva aqui o conteúdo principal do seu relatório. Estruture em seções claras:&#10;&#10;• Descrição do Contexto/Demanda: Detalhe o contexto ou a demanda escolhida, explicando as circunstâncias que motivaram este estudo ou intervenção.&#10;&#10;• Objetivos: Defina claramente os objetivos do atendimento, tanto os objetivos gerais quanto os específicos.&#10;&#10;• Possibilidades de Atuação: Explore e analise as diferentes possibilidades de atuação no caso, considerando alternativas e suas implicações.&#10;&#10;• Estudo de Caso: Apresente um exemplo prático que ilustre os conceitos discutidos ou demonstre a aplicação das metodologias propostas.&#10;&#10;Seja objetivo e use linguagem técnica apropriada."></div>
+          </section>
+  
+          <section id="consideracoes">
+            <h2>Considerações Finais</h2>
+            <div class="word-count-detailed" id="wordCountConsideracoes">0 palavras</div>
+            <div class="editable" contenteditable="true" data-placeholder="Escreva aqui suas considerações finais. Reflita sobre os resultados obtidos, aprendizados, limitações do estudo e sugestões para trabalhos futuros. Esta seção deve sintetizar as principais descobertas e conclusões do trabalho.&#10;&#10;Considere abordar:&#10;• Principais descobertas ou conclusões&#10;• Limitações do estudo&#10;• Sugestões para trabalhos futuros&#10;• Impacto e relevância dos resultados"></div>
+          </section>
+  
+          <section id="referencias">
+            <h2>Referências Bibliográficas</h2>
+            <div class="word-count-detailed" id="wordCountReferencias">0 palavras</div>
+            <div class="editable" contenteditable="true" data-placeholder="Liste aqui todas as fontes consultadas seguindo as normas ABNT. Inclua livros, artigos, sites e outras referências utilizadas no desenvolvimento do relatório.&#10;&#10;Exemplos de formatação ABNT:&#10;• SOBRENOME, Nome. Título da obra. Edição. Local: Editora, ano.&#10;• SOBRENOME, Nome. Título do artigo. Nome do Periódico, local, volume(número), páginas, mês/ano.&#10;• SOBRENOME, Nome. Título do trabalho. Ano. Dissertação (Mestrado) ou Tese (Doutorado) - Instituição, local, ano."></div>
+          </section>
+        </div>
+        
+        <!-- Versão Simples -->
+        <div id="simple-version" class="simple-version">
+          <section id="conteudo-geral">
+            <h2>Conteúdo do Relatório</h2>
+            
+            <div class="formatting-toolbar">
+              <div class="word-count" id="wordCount">0 palavras</div>
+            </div>
+            
+            <div class="editable" contenteditable="true" id="simpleContent" data-placeholder="Escreva aqui todo o conteúdo do seu relatório de forma livre e organizada.&#10;&#10;Dicas de estruturação:&#10;• Comece com uma introdução clara&#10;• Desenvolva o tema principal&#10;• Apresente análises e discussões&#10;• Conclua com considerações finais&#10;• Inclua referências se necessário&#10;&#10;Use a barra de formatação acima para destacar títulos, listas e citações importantes.&#10;&#10;Organize o texto em parágrafos bem estruturados e use linguagem clara e objetiva."></div>
+          </section>
+        </div>
+        <div id="modal-ia" class="modal">
+          <div class="modal-content modal-ia-content">
+            <div class="modal-header">
+              <div class="modal-title">Assistente de IA para Relatórios</div>
+              <button class="close-modal" onclick="closeIAModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="ia-options">
+                <h3>Como você gostaria de criar seu relatório?</h3>
                 
-                <!-- Controles de Gravação -->
-                <div class="audio-controls">
-                  <div class="tooltip">
-                    <button id="recordBtn" class="btn-record" onclick="toggleRecording()" aria-label="Iniciar gravação">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                           aria-hidden="true" class="lucide lucide-mic">
-                        <path d="M12 1v11"></path>
-                        <rect x="8" y="1" width="8" height="14" rx="4"></rect>
-                        <path d="M19 11a7 7 0 0 1-14 0"></path>
-                        <line x1="12" y1="19" x2="12" y2="23"></line>
-                        <line x1="8" y1="23" x2="16" y2="23"></line>
-                      </svg>
-                      <span class="sr-only">Iniciar Gravação</span>
-                    </button>
-                    <span class="tooltip-text" id="recordTooltip">Clique para iniciar gravação</span>
+                <!-- Opção de Áudio -->
+                <div class="ia-option audio-option">
+                  <h4>🎤 Gravação de Áudio</h4>
+                  <p>Grave um ou mais áudios explicando seu relatório e a IA criará o conteúdo para você</p>
+                  <div class="audio-notice" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 12px; color: #856404;">
+                    <strong>💡 Dica:</strong> Você pode gravar múltiplos áudios. Cada gravação será transcrita separadamente e todas serão combinadas na geração do relatório.
                   </div>
                   
-                  <div class="recording-info">
-                    <span id="recordingTime">00:00</span>
-                    <div class="audio-visualizer" id="audioVisualizer"></div>
-                  </div>
-                </div>
-                
-                <!-- Container para múltiplos áudios -->
-                <div id="audioRecordingsContainer" class="audio-recordings-container">
-                  <!-- Os áudios gravados serão inseridos aqui dinamicamente -->
-                </div>
-              </div>
-
-              <!-- Opção de Texto -->
-              <div class="ia-option text-option">
-                <h4>✍️ Descrição por Texto</h4>
-                <p>Descreva completamente o que você quer no relatório. Seja específico e inclua todos os detalhes necessários.</p>
-                <div class="text-description-notice" style="background: #e7f3ff; border: 1px solid #b3d9ff; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 12px; color: #004085;">
-                  <strong>💡 Você pode incluir:</strong>
-                  <ul style="margin: 5px 0; padding-left: 20px;">
-                    <li>Descrição completa do relatório ou apenas tópicos específicos</li>
-                    <li>Links e URLs para referências</li>
-                    <li>Nomes de autores, livros ou artigos específicos</li>
-                    <li>Dados, estatísticas ou informações específicas</li>
-                    <li>Estrutura desejada (introdução, desenvolvimento, conclusão, etc.)</li>
-                  </ul>
-                </div>
-                <textarea id="textDescription" placeholder="Ex: Quero um relatório sobre sustentabilidade empresarial, incluindo conceitos básicos, benefícios, desafios e exemplos práticos. Usar como referência o livro 'Green Business' de John Smith e o artigo disponível em https://exemplo.com/sustentabilidade. Incluir dados da ONU sobre mudanças climáticas e casos de sucesso da empresa Patagonia..." rows="6"></textarea>
-              </div>
-
-              <!-- Configurações -->
-              <div class="ia-settings">
-                <h4>⚙️ Configurações do Relatório</h4>
-                <div class="settings-grid">
-                  <div class="setting-item api-key-setting">
-                    <label for="geminiApiKey">🔑 Chave API Gemini:</label>
-                    <div class="api-key-input-group">
-                      <input type="password" id="geminiApiKey" placeholder="Cole sua chave API aqui..." maxlength="100">
-                      <button type="button" id="toggleApiKey" class="btn-toggle-key" onclick="toggleApiKeyVisibility()" title="Mostrar/Ocultar chave">
-                        👁️
+                  <!-- Controles de Gravação -->
+                  <div class="audio-controls">
+                    <div class="tooltip">
+                      <button id="recordBtn" class="btn-record" onclick="toggleRecording()" aria-label="Iniciar gravação">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             aria-hidden="true" class="lucide lucide-mic">
+                          <path d="M12 1v11"></path>
+                          <rect x="8" y="1" width="8" height="14" rx="4"></rect>
+                          <path d="M19 11a7 7 0 0 1-14 0"></path>
+                          <line x1="12" y1="19" x2="12" y2="23"></line>
+                          <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                        <span class="sr-only">Iniciar Gravação</span>
                       </button>
+                      <span class="tooltip-text" id="recordTooltip">Clique para iniciar gravação</span>
                     </div>
-                    <div class="api-key-status" id="apiKeyStatus">
-                      <span class="status-empty">Nenhuma chave configurada</span>
-                    </div>
-                    <div class="api-key-help">
-                      <small>
-                        💡 <strong>Como obter sua chave:</strong> 
-                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">
-                          Clique aqui para obter uma chave gratuita do Google AI Studio
-                        </a>
-                      </small>
+                    
+                    <div class="recording-info">
+                      <span id="recordingTime">00:00</span>
+                      <div class="audio-visualizer" id="audioVisualizer"></div>
                     </div>
                   </div>
-                  <div class="setting-item">
-                    <label for="reportTopic">Tema Principal:</label>
-                    <input type="text" id="reportTopic" placeholder="Ex: Sustentabilidade Empresarial">
-                  </div>
-                  <div class="setting-item">
-                    <label for="reportLength">Tamanho:</label>
-                    <select id="reportLength">
-                      <option value="short">Curto (2-3 páginas)</option>
-                      <option value="medium" selected>Médio (4-6 páginas)</option>
-                      <option value="long">Longo (7-10 páginas)</option>
-                    </select>
-                  </div>
-                  <div class="setting-item">
-                    <label for="academicLevel">Nível Acadêmico:</label>
-                    <select id="academicLevel">
-                      <option value="ensino-medio">Ensino Médio</option>
-                      <option value="graduacao" selected>Graduação</option>
-                      <option value="pos-graduacao">Pós-graduação</option>
-                    </select>
-                  </div>
-                  <div class="setting-item">
-                    <label for="reportStyle">Estilo:</label>
-                    <select id="reportStyle">
-                      <option value="formal" selected>Formal/Acadêmico</option>
-                      <option value="tecnico">Técnico</option>
-                      <option value="didatico">Didático</option>
-                    </select>
+                  
+                  <!-- Container para múltiplos áudios -->
+                  <div id="audioRecordingsContainer" class="audio-recordings-container">
+                    <!-- Os áudios gravados serão inseridos aqui dinamicamente -->
                   </div>
                 </div>
-              </div>
-
-              <!-- Botão de Gerar -->
-              <div class="generate-section">
-                <div class="tooltip">
-                  <button id="generateBtn" class="btn-generate" onclick="generateReportWithIA()">
-                    <span id="generateIcon">🤖</span>
-                    <span id="generateText">Gerar Relatório com IA</span>
-                  </button>
-                  <span class="tooltip-text" id="generateTooltip">Processar conteúdo e gerar relatório automaticamente</span>
-                </div>
-                <div class="generate-progress" id="generateProgress" style="display: none;">
-                  <div class="progress-bar">
-                    <div class="progress-fill"></div>
+  
+                <!-- Opção de Texto -->
+                <div class="ia-option text-option">
+                  <h4>✍️ Descrição por Texto</h4>
+                  <p>Descreva completamente o que você quer no relatório. Seja específico e inclua todos os detalhes necessários.</p>
+                  <div class="text-description-notice" style="background: #e7f3ff; border: 1px solid #b3d9ff; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 12px; color: #004085;">
+                    <strong>💡 Você pode incluir:</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px;">
+                      <li>Descrição completa do relatório ou apenas tópicos específicos</li>
+                      <li>Links e URLs para referências</li>
+                      <li>Nomes de autores, livros ou artigos específicos</li>
+                      <li>Dados, estatísticas ou informações específicas</li>
+                      <li>Estrutura desejada (introdução, desenvolvimento, conclusão, etc.)</li>
+                    </ul>
                   </div>
-                  <p id="progressText">Analisando conteúdo...</p>
+                  <textarea id="textDescription" placeholder="Ex: Quero um relatório sobre sustentabilidade empresarial, incluindo conceitos básicos, benefícios, desafios e exemplos práticos. Usar como referência o livro 'Green Business' de John Smith e o artigo disponível em https://exemplo.com/sustentabilidade. Incluir dados da ONU sobre mudanças climáticas e casos de sucesso da empresa Patagonia..." rows="6"></textarea>
+                </div>
+  
+                <!-- Configurações -->
+                <div class="ia-settings">
+                  <h4>⚙️ Configurações do Relatório</h4>
+                  <div class="settings-grid">
+                    <div class="setting-item api-key-setting">
+                      <label for="geminiApiKey">🔑 Chave API Gemini:</label>
+                      <div class="api-key-input-group">
+                        <input type="password" id="geminiApiKey" placeholder="Cole sua chave API aqui..." maxlength="100">
+                        <button type="button" id="toggleApiKey" class="btn-toggle-key" onclick="toggleApiKeyVisibility()" title="Mostrar/Ocultar chave">
+                          👁️
+                        </button>
+                      </div>
+                      <div class="api-key-status" id="apiKeyStatus">
+                        <span class="status-empty">Nenhuma chave configurada</span>
+                      </div>
+                      <div class="api-key-help">
+                        <small>
+                          💡 <strong>Como obter sua chave:</strong> 
+                          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">
+                            Clique aqui para obter uma chave gratuita do Google AI Studio
+                          </a>
+                        </small>
+                      </div>
+                    </div>
+                    <div class="setting-item">
+                      <label for="reportTopic">Tema Principal:</label>
+                      <input type="text" id="reportTopic" placeholder="Ex: Sustentabilidade Empresarial">
+                    </div>
+                    <div class="setting-item">
+                      <label for="reportLength">Tamanho:</label>
+                      <select id="reportLength">
+                        <option value="short">Curto (2-3 páginas)</option>
+                        <option value="medium" selected>Médio (4-6 páginas)</option>
+                        <option value="long">Longo (7-10 páginas)</option>
+                      </select>
+                    </div>
+                    <div class="setting-item">
+                      <label for="academicLevel">Nível Acadêmico:</label>
+                      <select id="academicLevel">
+                        <option value="ensino-medio">Ensino Médio</option>
+                        <option value="graduacao" selected>Graduação</option>
+                        <option value="pos-graduacao">Pós-graduação</option>
+                      </select>
+                    </div>
+                    <div class="setting-item">
+                      <label for="reportStyle">Estilo:</label>
+                      <select id="reportStyle">
+                        <option value="formal" selected>Formal/Acadêmico</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="didatico">Didático</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+  
+                <!-- Botão de Gerar -->
+                <div class="generate-section">
+                  <div class="tooltip">
+                    <button id="generateBtn" class="btn-generate" onclick="generateReportWithIA()">
+                      <span id="generateIcon">🤖</span>
+                      <span id="generateText">Gerar Relatório com IA</span>
+                    </button>
+                    <span class="tooltip-text" id="generateTooltip">Processar conteúdo e gerar relatório automaticamente</span>
+                  </div>
+                  <div class="generate-progress" id="generateProgress" style="display: none;">
+                    <div class="progress-bar">
+                      <div class="progress-fill"></div>
+                    </div>
+                    <p id="progressText">Analisando conteúdo...</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Footer -->
-  <footer class="page-footer">
-    <div class="footer-content">
-      <p>&copy; 2025 Sistema de Relatórios com IA</p>
-      <button class="footer-info-btn" id="footerInfoBtn" type="button" onclick="showInfoModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="16" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-        </svg>
-        Sobre
-      </button>
+      </main>
     </div>
-  </footer>
-
-  <!-- Botão flutuante de ajuda -->
-  <!--<button class="help-button" id="helpButton" onclick="showHelpModal()">!</button>-->
-
-  <!-- Modal de ajuda -->
-  <div class="modal" id="helpModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">Dicas de Preenchimento</div>
-        <button class="close-modal" onclick="closeHelpModal()">&times;</button>
-      </div>
-      <div class="modal-body" id="modalBody">
-        <!-- Conteúdo será preenchido dinamicamente -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal de Informações -->
-  <div class="modal" id="infoModal">
-    <div class="modal-content info-modal-content">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+  
+    <!-- Footer -->
+    <footer class="page-footer">
+      <div class="footer-content">
+        <p>&copy; 2025 Sistema de Relatórios com IA</p>
+        <button class="footer-info-btn" id="footerInfoBtn" type="button" onclick="showInfoModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               style="margin-right: 8px; color: #007bff;">
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="16" x2="12" y2="12"></line>
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
-          Sobre o Sistema
-        </div>
-        <button class="close-modal" onclick="closeInfoModal()">&times;</button>
+          Sobre
+        </button>
       </div>
-      <div class="modal-body info-modal-body">
-        <div class="info-section">
-          <h3>🤖 Sistema de Relatórios com IA</h3>
-          <p>Uma ferramenta moderna e intuitiva para criação de relatórios acadêmicos e profissionais com o poder da Inteligência Artificial.</p>
+    </footer>
+  
+    <!-- Botão flutuante de ajuda -->
+    <!--<button class="help-button" id="helpButton" onclick="showHelpModal()">!</button>-->
+  
+    <!-- Modal de ajuda -->
+    <div class="modal" id="helpModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Dicas de Preenchimento</div>
+          <button class="close-modal" onclick="closeHelpModal()">&times;</button>
         </div>
-
-        <div class="info-section">
-          <h3>✨ Principais Funcionalidades</h3>
-          <ul class="feature-list">
-            <li>📝 Editor inteligente com duas versões (Detalhada e Simples)</li>
-            <li>🎤 Gravação e transcrição de áudio com IA</li>
-            <li>🤖 Geração automática de conteúdo com Google Gemini</li>
-            <li>📄 Exportação para PDF profissional</li>
-            <li>💾 Salvamento automático no navegador</li>
-            <li>📱 Interface responsiva para mobile e desktop</li>
-            <li>🎨 Múltiplas fontes e estilos de formatação</li>
-          </ul>
+        <div class="modal-body" id="modalBody">
+          <!-- Conteúdo será preenchido dinamicamente -->
         </div>
-
-        <div class="info-section">
-          <h3>👨‍💻 Desenvolvido por</h3>
-          <div class="developer-info">
-            <div class="developer-avatar">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
-                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </div>
-            <div class="developer-details">
-              <h4>Giuseph De Luka Giangareli</h4>
-              <p>Desenvolvedor Full Stack</p>
-              <p class="developer-description">
-                Especialista em desenvolvimento web moderno, inteligência artificial e experiência do usuário.
-              </p>
+      </div>
+    </div>
+  
+    <!-- Modal de Informações -->
+    <div class="modal" id="infoModal">
+      <div class="modal-content info-modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 style="margin-right: 8px; color: #007bff;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            Sobre o Sistema
+          </div>
+          <button class="close-modal" onclick="closeInfoModal()">&times;</button>
+        </div>
+        <div class="modal-body info-modal-body">
+          <div class="info-section">
+            <h3>🤖 Sistema de Relatórios com IA</h3>
+            <p>Uma ferramenta moderna e intuitiva para criação de relatórios acadêmicos e profissionais com o poder da Inteligência Artificial.</p>
+          </div>
+  
+          <div class="info-section">
+            <h3>✨ Principais Funcionalidades</h3>
+            <ul class="feature-list">
+              <li>📝 Editor inteligente com duas versões (Detalhada e Simples)</li>
+              <li>🎤 Gravação e transcrição de áudio com IA</li>
+              <li>🤖 Geração automática de conteúdo com Google Gemini</li>
+              <li>📄 Exportação para PDF profissional</li>
+              <li>💾 Salvamento automático no navegador</li>
+              <li>📱 Interface responsiva para mobile e desktop</li>
+              <li>🎨 Múltiplas fontes e estilos de formatação</li>
+            </ul>
+          </div>
+  
+          <div class="info-section">
+            <h3>👨‍💻 Desenvolvido por</h3>
+            <div class="developer-info">
+              <div class="developer-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="developer-details">
+                <h4>Giuseph De Luka Giangareli</h4>
+                <p>Desenvolvedor Full Stack</p>
+                <p class="developer-description">
+                  Especialista em desenvolvimento web moderno, inteligência artificial e experiência do usuário.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="info-section gratitude-section">
-          <h3>🙏 Agradecimento</h3>
-          <div class="gratitude-content">
-            <p><strong>Obrigado por usar nosso sistema!</strong></p>
-            <p>Sua confiança em nossa ferramenta nos motiva a continuar inovando e melhorando constantemente. 
-               Esperamos que este sistema torne seu trabalho mais eficiente e produtivo.</p>
-            <p>Se você tem sugestões ou feedback, ficaremos muito felizes em ouvir!</p>
+  
+          <div class="info-section gratitude-section">
+            <h3>🙏 Agradecimento</h3>
+            <div class="gratitude-content">
+              <p><strong>Obrigado por usar nosso sistema!</strong></p>
+              <p>Sua confiança em nossa ferramenta nos motiva a continuar inovando e melhorando constantemente. 
+                 Esperamos que este sistema torne seu trabalho mais eficiente e produtivo.</p>
+              <p>Se você tem sugestões ou feedback, ficaremos muito felizes em ouvir!</p>
+            </div>
           </div>
-        </div>
-
-        <div class="page-footer">
-          <div class="version-info">
-            <span class="version-label">Versão:</span>
-            <span class="version-number">2.0.6</span>
-            <span class="version-date">Agosto 2025</span>
+  
+          <div class="page-footer">
+            <div class="version-info">
+              <span class="version-label">Versão:</span>
+              <span class="version-number">2.0.7</span>
+              <span class="version-date">Agosto 2025</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Modal de Alerta Personalizado -->
-  <div class="modal" id="customAlertModal">
-    <div class="modal-content custom-alert-content">
-      <div class="modal-header">
-        <div class="modal-title" id="alertTitle">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               id="alertIcon" style="margin-right: 8px;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-          <span id="alertTitleText">Alerta</span>
+  
+    <!-- Modal de Alerta Personalizado -->
+    <div class="modal" id="customAlertModal">
+      <div class="modal-content custom-alert-content">
+        <div class="modal-header">
+          <div class="modal-title" id="alertTitle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 id="alertIcon" style="margin-right: 8px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span id="alertTitleText">Alerta</span>
+          </div>
+          <button class="close-modal" onclick="closeCustomAlert()">&times;</button>
         </div>
-        <button class="close-modal" onclick="closeCustomAlert()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id="alertMessage" class="alert-message">
-          <!-- Mensagem será inserida aqui -->
+        <div class="modal-body">
+          <div id="alertMessage" class="alert-message">
+            <!-- Mensagem será inserida aqui -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="alert-buttons" id="alertButtons">
+            <!-- Botões serão inseridos aqui -->
+          </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <div class="alert-buttons" id="alertButtons">
-          <!-- Botões serão inseridos aqui -->
-        </div>
-      </div>
-    </div>
-  </div>
-
+    </div>  
   <script src="script.js"></script>
 </body>
 </html>

@@ -2579,89 +2579,320 @@
         
         pdfFont = fontMapping[selectedFont] || 'helvetica';
         
-        // Configurações de página
+        // Definir a fonte padrão para todo o documento
+        pdf.setFont(pdfFont, 'normal');
+        
+        // Configurações de página melhoradas
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
-        const margin = 20;
+        const margin = 25;
         const contentWidth = pageWidth - (2 * margin);
+        
+        // Configurações de espaçamento e formatação padronizadas
+        const spacing = {
+          title: { before: 0, after: 25, lineHeight: 10 },
+          sectionTitle: { before: 20, after: 15, lineHeight: 8 },
+          subtitle: { before: 12, after: 8, lineHeight: 7 },
+          paragraph: { before: 0, after: 8, lineHeight: 7 },
+          lineBreak: 8, // Espaço para quebras de linha explícitas
+          listItem: { before: 3, after: 3, lineHeight: 6 }
+        };
+        
+        // Tamanhos de fonte padronizados
+        const fontSizes = {
+          title: 20,
+          sectionTitle: 16,
+          subtitle: 14,
+          content: 12,
+          footer: 9
+        };
+        
+        // Função para processar quebras de linha e parágrafos
+        function processTextWithLineBreaks(text) {
+          // Preservar quebras de linha explícitas
+          const lines = text.split('\n');
+          const processedParagraphs = [];
+          
+          let currentParagraph = '';
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            
+            if (line === '') {
+              // Linha vazia: finalizar parágrafo atual se houver conteúdo
+              if (currentParagraph.trim() !== '') {
+                processedParagraphs.push(currentParagraph.trim());
+                currentParagraph = '';
+              }
+              // Adicionar marcador de linha vazia para espaçamento
+              processedParagraphs.push('__EMPTY_LINE__');
+            } else {
+              // Linha com conteúdo: adicionar ao parágrafo atual
+              if (currentParagraph !== '') {
+                currentParagraph += ' ';
+              }
+              currentParagraph += line;
+            }
+          }
+          
+          // Adicionar último parágrafo se houver
+          if (currentParagraph.trim() !== '') {
+            processedParagraphs.push(currentParagraph.trim());
+          }
+          
+          return processedParagraphs;
+        }
+        
+        // Função para adicionar texto justificado respeitando quebras de linha
+        function addJustifiedText(text, x, y, maxWidth, fontSize = fontSizes.content, fontStyle = 'normal') {
+          // Salvar o tamanho da fonte atual
+          const currentFontSize = pdf.getFontSize();
+          const currentFont = pdf.getFont();
+          
+          pdf.setFontSize(fontSize);
+          pdf.setFont(pdfFont, fontStyle);
+          
+          const paragraphs = processTextWithLineBreaks(text);
+          let currentY = y;
+          
+          paragraphs.forEach((paragraph, paragraphIndex) => {
+            // Verificar se é uma linha vazia
+            if (paragraph === '__EMPTY_LINE__') {
+              currentY += spacing.lineBreak;
+              return;
+            }
+            
+            // Verificar se precisa de nova página antes do parágrafo
+            if (currentY > pageHeight - 50) {
+              pdf.addPage();
+              currentY = margin;
+              // Garantir que a fonte e tamanho sejam mantidos na nova página
+              pdf.setFontSize(fontSize);
+              pdf.setFont(pdfFont, 'normal');
+              addPageFooter();
+            }
+            
+            // Adicionar espaçamento antes do parágrafo (se não for o primeiro)
+            if (paragraphIndex > 0 && paragraphs[paragraphIndex - 1] !== '__EMPTY_LINE__') {
+              currentY += spacing.paragraph.before;
+            }
+            
+            // Dividir parágrafo em palavras
+            const words = paragraph.trim().split(' ').filter(word => word !== '');
+            if (words.length === 0) return;
+            
+            let lines = [];
+            let currentLine = '';
+            
+            // Construir linhas respeitando a largura máxima
+            words.forEach(word => {
+              const testLine = currentLine + (currentLine ? ' ' : '') + word;
+              const testWidth = pdf.getTextWidth(testLine);
+              
+              if (testWidth <= maxWidth) {
+                currentLine = testLine;
+              } else {
+                if (currentLine) {
+                  lines.push(currentLine);
+                  currentLine = word;
+                } else {
+                  // Palavra muito longa, forçar quebra
+                  lines.push(word);
+                }
+              }
+            });
+            
+            if (currentLine) {
+              lines.push(currentLine);
+            }
+            
+            // Adicionar linhas com justificação (exceto a última linha do parágrafo)
+            lines.forEach((line, lineIndex) => {
+              // Verificar se precisa de nova página
+              if (currentY > pageHeight - 40) {
+                pdf.addPage();
+                currentY = margin;
+                // Garantir que a fonte e tamanho sejam mantidos na nova página
+                pdf.setFontSize(fontSize);
+                pdf.setFont(pdfFont, 'normal');
+                addPageFooter();
+              }
+              
+              const isLastLine = lineIndex === lines.length - 1;
+              
+              if (!isLastLine && lines.length > 1) {
+                // Justificar linha (exceto a última)
+                addJustifiedLine(line, x, currentY, maxWidth);
+              } else {
+                // Última linha: alinhamento à esquerda
+                pdf.text(line, x, currentY);
+              }
+              
+              currentY += spacing.paragraph.lineHeight;
+            });
+            
+            // Adicionar espaçamento após o parágrafo
+            currentY += spacing.paragraph.after;
+          });
+          
+          // Restaurar a fonte e tamanho originais
+          pdf.setFontSize(currentFontSize);
+          pdf.setFont(currentFont.fontName, currentFont.fontStyle);
+          
+          return currentY;
+        }
+        
+        // Função para justificar uma linha
+        function addJustifiedLine(line, x, y, maxWidth) {
+          const words = line.split(' ');
+          if (words.length <= 1) {
+            pdf.text(line, x, y);
+            return;
+          }
+          
+          const totalTextWidth = words.reduce((sum, word) => sum + pdf.getTextWidth(word), 0);
+          const totalSpaceWidth = maxWidth - totalTextWidth;
+          
+          // Evitar espaçamento excessivo entre palavras
+          if (totalSpaceWidth / (words.length - 1) > pdf.getTextWidth(' ') * 3) {
+            pdf.text(line, x, y);
+            return;
+          }
+          
+          const spaceWidth = totalSpaceWidth / (words.length - 1);
+          
+          let currentX = x;
+          words.forEach((word, index) => {
+            pdf.text(word, currentX, y);
+            currentX += pdf.getTextWidth(word);
+            
+            if (index < words.length - 1) {
+              currentX += spaceWidth;
+            }
+          });
+        }
+        
+        // Função para adicionar título de seção
+        function addSectionTitle(title, x, y, maxWidth) {
+          // Salvar o tamanho da fonte atual
+          const currentFontSize = pdf.getFontSize();
+          const currentFont = pdf.getFont();
+          
+          pdf.setFontSize(fontSizes.sectionTitle);
+          pdf.setFont(pdfFont, 'bold');
+          
+          const titleLines = pdf.splitTextToSize(title, maxWidth);
+          let currentY = y;
+          
+          titleLines.forEach((line, index) => {
+            pdf.text(line, x, currentY + (index * spacing.sectionTitle.lineHeight));
+          });
+          
+          // Restaurar a fonte e tamanho originais
+          pdf.setFontSize(currentFontSize);
+          pdf.setFont(currentFont.fontName, currentFont.fontStyle);
+          
+          return currentY + (titleLines.length * spacing.sectionTitle.lineHeight) + spacing.sectionTitle.after;
+        }
+        
+        // Função para adicionar rodapé com data
+        function addPageFooter() {
+          const currentDate = new Date().toLocaleDateString('pt-BR');
+          // Salvar o tamanho da fonte atual
+          const currentFontSize = pdf.getFontSize();
+          const currentFont = pdf.getFont();
+          
+          // Definir fonte para o rodapé
+          pdf.setFontSize(fontSizes.footer);
+          pdf.setFont(pdfFont, 'normal');
+          pdf.text(currentDate, pageWidth / 2, pageHeight - 15, { align: 'center' });
+          
+          // Restaurar a fonte e tamanho originais
+          pdf.setFontSize(currentFontSize);
+          pdf.setFont(currentFont.fontName, currentFont.fontStyle);
+        }
+        
+        // Função para obter texto preservando quebras de linha do HTML
+        function getTextWithLineBreaks(element) {
+          if (!element) return '';
+          
+          // Criar um clone do elemento para manipulação
+          const clone = element.cloneNode(true);
+          
+          // Substituir <br> e </p><p> por quebras de linha
+          const brElements = clone.querySelectorAll('br');
+          brElements.forEach(br => {
+            br.parentNode.insertBefore(document.createTextNode('\n'), br);
+            br.remove();
+          });
+          
+          // Processar parágrafos
+          const pElements = clone.querySelectorAll('p');
+          pElements.forEach((p, index) => {
+            if (index > 0) {
+              p.parentNode.insertBefore(document.createTextNode('\n\n'), p);
+            }
+          });
+          
+          // Processar divs que funcionam como quebras de linha
+          const divElements = clone.querySelectorAll('div');
+          divElements.forEach((div, index) => {
+            if (index > 0) {
+              div.parentNode.insertBefore(document.createTextNode('\n'), div);
+            }
+          });
+          
+          return clone.textContent || clone.innerText || '';
+        }
         
         // Obter dados do relatório
         const titleElement = document.querySelector('h1');
         let title = titleElement ? titleElement.textContent.trim() : '';
-        
-        // Remover acentos do titulo
         
         // Validar título
         if (!title || title === 'Título do Relatório') {
           title = 'Relatório Acadêmico';
         }
         
-        // Limitar tamanho máximo do título para evitar problemas de layout
+        // Limitar tamanho máximo do título
         if (title.length > 120) {
           title = title.substring(0, 117) + '...';
         }
         
-        const author = 'Autor: ' + document.querySelector('.autor').textContent.replace('Autor: ', '') || 'Nome do Autor';
-        const professor = 'Professor: ' + document.querySelector('.professor').textContent.replace('Professor: ', '') || 'Nome do Professor';
-        const currentDate = new Date().toLocaleDateString('pt-BR');
+        const author = document.querySelector('.autor').textContent.replace('Autor: ', '') || 'Nome do Autor';
+        const professor = document.querySelector('.professor').textContent.replace('Professor: ', '') || 'Nome do Professor';
         
         let yPosition = margin;
         
-        // Primeira página - Cabeçalho
-        // Título no topo com quebra de linha para títulos longos
-        pdf.setFontSize(18);
+        // Primeira página - Capa
+        // Título centralizado no topo
+        pdf.setFontSize(fontSizes.title);
         pdf.setFont(pdfFont, 'bold');
         
-        // Quebrar título em linhas se for muito longo
-        const maxTitleWidth = contentWidth - 40; // Deixar margem extra para o título
-        const titleLines = pdf.splitTextToSize(title, maxTitleWidth);
-        
-        // Limitar número máximo de linhas do título
-        const maxTitleLines = 3;
-        let finalTitleLines = titleLines;
+        const titleLines = pdf.splitTextToSize(title, contentWidth - 40);
+        const maxTitleLines = 4;
+        let finalTitleLines = titleLines.slice(0, maxTitleLines);
         
         if (titleLines.length > maxTitleLines) {
-          // Se o título tem muitas linhas, truncar e adicionar "..."
-          finalTitleLines = titleLines.slice(0, maxTitleLines - 1);
-          const lastLine = titleLines[maxTitleLines - 1];
-          const truncatedLastLine = lastLine.length > 50 ? lastLine.substring(0, 47) + '...' : lastLine + '...';
-          finalTitleLines.push(truncatedLastLine);
+          const lastLineIndex = maxTitleLines - 1;
+          finalTitleLines[lastLineIndex] = finalTitleLines[lastLineIndex].substring(0, 50) + '...';
         }
         
-        // Calcular altura total do título
-        const lineHeight = 8; // Altura entre linhas
-        const titleHeight = finalTitleLines.length * lineHeight;
-        
-        // Adicionar cada linha do título
+        // Centralizar título verticalmente na parte superior
+        yPosition = 60;
         finalTitleLines.forEach((line, index) => {
-          pdf.text(line, pageWidth / 2, yPosition + (index * lineHeight), { align: 'center' });
+          pdf.text(line, pageWidth / 2, yPosition + (index * spacing.title.lineHeight), { align: 'center' });
         });
         
-        // Ajustar posição Y baseada no número de linhas do título
-        yPosition += titleHeight + 20; // Espaço extra após o título
-        
-        // Autor e Professor no centro da página (ajustado para títulos grandes)
-        let centerY = pageHeight / 2;
-        
-        // Se o título for muito grande, ajustar o centro para baixo
-        const titleEndPosition = margin + titleHeight + 20;
-        if (titleEndPosition > 80) {
-          centerY = Math.max(centerY, titleEndPosition + 60);
-        }
-        
-        // Garantir que autor e professor não fiquem muito próximos da data
-        const minDistanceFromBottom = 80;
-        centerY = Math.min(centerY, pageHeight - minDistanceFromBottom);
-        
-        pdf.setFontSize(12);
+        // Informações do autor e professor no centro da página
+        const centerY = pageHeight / 2 - 20;
+        pdf.setFontSize(fontSizes.subtitle);
         pdf.setFont(pdfFont, 'normal');
-        pdf.text(author, pageWidth / 2, centerY - 10, { align: 'center' });
-        pdf.text(professor, pageWidth / 2, centerY + 10, { align: 'center' });
+        pdf.text('Autor: ' + author, pageWidth / 2, centerY, { align: 'center' });
+        pdf.text('Professor: ' + professor, pageWidth / 2, centerY + 20, { align: 'center' });
         
-        // Data no final da primeira página
-        pdf.setFontSize(10);
-        pdf.setFont(pdfFont, 'normal');
-        pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+        // Data no rodapé da primeira página
+        addPageFooter();
         
         // Conteúdo baseado no tipo de relatório - COMEÇA NA SEGUNDA PÁGINA
         const reportType = document.getElementById('reportType').value;
@@ -2675,130 +2906,92 @@
             { id: 'referencias', title: 'Referências Bibliográficas' }
           ];
           
+          let isFirstSection = true;
+          
           for (let i = 0; i < sections.length; i++) {
             const section = sections[i];
             const sectionElement = document.getElementById(section.id);
             
             if (sectionElement) {
-              const content = sectionElement.querySelector('.editable').textContent.trim();
+              const contentElement = sectionElement.querySelector('.editable');
+              const content = contentElement ? getTextWithLineBreaks(contentElement) : '';
               
-              if (content) {
-                // Sempre começar na segunda página para o primeiro conteúdo
-                if (i === 0) {
+              if (content.trim()) {
+                // Primeira seção sempre na segunda página
+                if (isFirstSection) {
                   pdf.addPage();
                   yPosition = margin;
-                  // Data no final de cada página
-                  pdf.setFontSize(10);
+                  // Garantir que a fonte e tamanho sejam mantidos na nova página
+                  pdf.setFontSize(fontSizes.content);
                   pdf.setFont(pdfFont, 'normal');
-                  pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+                  addPageFooter();
+                  isFirstSection = false;
                 } else {
-                  // Verificar se precisa de nova página para seções subsequentes
-                  if (yPosition > pageHeight - 60) {
+                  // Verificar se precisa de nova página para outras seções
+                  if (yPosition > pageHeight - 80) {
                     pdf.addPage();
                     yPosition = margin;
-                    // Data no final de cada página
-                    pdf.setFontSize(10);
+                    // Garantir que a fonte e tamanho sejam mantidos na nova página
+                    pdf.setFontSize(fontSizes.content);
                     pdf.setFont(pdfFont, 'normal');
-                    pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+                    addPageFooter();
+                  } else {
+                    yPosition += spacing.sectionTitle.before;
                   }
                 }
                 
-                // Título da seção com quebra de linha se necessário
-                pdf.setFontSize(14);
-                pdf.setFont(pdfFont, 'bold');
-                
-                // Quebrar título da seção se for muito longo
-                const sectionTitleLines = pdf.splitTextToSize(section.title, contentWidth);
-                sectionTitleLines.forEach((line, index) => {
-                  pdf.text(line, margin, yPosition + (index * 6));
-                });
-                
-                yPosition += (sectionTitleLines.length * 6) + 9; // Ajustar espaço baseado no número de linhas
-                
-                // Conteúdo da seção
-                pdf.setFontSize(11);
-                pdf.setFont(pdfFont, 'normal');
-                
-                // Quebrar texto em linhas
-                const lines = pdf.splitTextToSize(content, contentWidth);
-                
-                for (let j = 0; j < lines.length; j++) {
-                  // Verificar se precisa de nova página
-                  if (yPosition > pageHeight - 40) {
-                    pdf.addPage();
-                    yPosition = margin;
-                    // Data no final de cada página
-                    pdf.setFontSize(10);
-                    pdf.setFont(pdfFont, 'normal');
-                    pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
-                  }
-                  
-                  pdf.text(lines[j], margin, yPosition);
-                  yPosition += 6;
+                // Verificar se precisa de nova página após espaçamento
+                if (yPosition > pageHeight - 60) {
+                  pdf.addPage();
+                  yPosition = margin;
+                  // Garantir que a fonte e tamanho sejam mantidos na nova página
+                  pdf.setFontSize(fontSizes.content);
+                  pdf.setFont(pdfFont, 'normal');
+                  addPageFooter();
                 }
                 
-                yPosition += 10; // Espaço entre seções
+                // Título da seção com tamanho padronizado
+                yPosition = addSectionTitle(section.title, margin, yPosition, contentWidth);
+                
+                // Conteúdo da seção com justificação e respeitando quebras de linha
+                yPosition = addJustifiedText(content, margin, yPosition, contentWidth, fontSizes.content, 'normal');
+                
+                // Espaço adicional entre seções
+                yPosition += 15;
               }
             }
           }
         } else {
-          // Versão simples - COMEÇA NA SEGUNDA PÁGINA
+          // Versão simples
           const simpleContent = document.getElementById('simpleContent');
           if (simpleContent) {
-            const content = simpleContent.textContent.trim();
+            const content = getTextWithLineBreaks(simpleContent);
             
-            if (content) {
-              // Sempre começar na segunda página
+            if (content.trim()) {
+              // Começar na segunda página
               pdf.addPage();
               yPosition = margin;
-              // Data no final de cada página
-              pdf.setFontSize(10);
+              // Garantir que a fonte e tamanho sejam mantidos na nova página
+              pdf.setFontSize(fontSizes.content);
               pdf.setFont(pdfFont, 'normal');
-              pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
+              addPageFooter();
               
-              // Título da seção com quebra de linha se necessário
-              pdf.setFontSize(14);
-              pdf.setFont(pdfFont, 'bold');
+              // Título da seção com tamanho padronizado
               
-              // Quebrar título se for muito longo
-              const simpleTitleLines = pdf.splitTextToSize('Conteúdo do Relatório', contentWidth);
-              simpleTitleLines.forEach((line, index) => {
-                pdf.text(line, margin, yPosition + (index * 6));
-              });
-              
-              yPosition += (simpleTitleLines.length * 6) + 9;
-              
-              // Conteúdo
-              pdf.setFontSize(11);
-              pdf.setFont(pdfFont, 'normal');
-              
-              // Quebrar texto em linhas
-              const lines = pdf.splitTextToSize(content, contentWidth);
-              
-              for (let j = 0; j < lines.length; j++) {
-                // Verificar se precisa de nova página
-                if (yPosition > pageHeight - 40) {
-                  pdf.addPage();
-                  yPosition = margin;
-                  // Data no final de cada página
-                  pdf.setFontSize(10);
-                  pdf.setFont(pdfFont, 'normal');
-                  pdf.text(currentDate, pageWidth / 2, pageHeight - margin, { align: 'center' });
-                }
-                
-                pdf.text(lines[j], margin, yPosition);
-                yPosition += 6;
-              }
+              // Conteúdo com justificação e respeitando quebras de linha
+              yPosition = addJustifiedText(content, margin, yPosition, contentWidth, fontSizes.content, 'normal');
             }
           }
         }
         
         // Salvar PDF
-        if (title) {
-          title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        let fileName = title;
+        if (fileName) {
+          fileName = fileName.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          fileName = fileName.replace(/[^a-zA-Z0-9\s]/g, '_').replace(/\s+/g, '_');
         }
-        const fileName = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
-        pdf.save(fileName);
+        const finalFileName = `${fileName || 'Relatorio'}.pdf`;
+        pdf.save(finalFileName);
         
       } catch (error) {
         console.error('Erro ao gerar PDF:', error);
